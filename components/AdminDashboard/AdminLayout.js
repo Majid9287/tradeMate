@@ -160,7 +160,62 @@ const AdminLayout = ({ children }) => {
               </>
             )}
           </div>
+          <div className="mt-4">
+            <li className={`px-4 py-1`}>
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleintroDropdown(); // Function to show/hide the dropdown
+                }}
+                className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
+                  router.pathname === "" ? "bg-amber-500" : ""
+                }`}
+              >
+                <div className="flex">
+                  <FaReadme  className="mr-2 mt-1" />{" "}
+                  <h1 className="font-bold">Introduction</h1>
+                </div>
+                <div>
+                  {!introDropdownOpen && (
+                    <IoMdArrowDropright className="mr-2 mt-1" />
+                  )}
+                  {introDropdownOpen && (
+                    <IoMdArrowDropdown className="mr-2 mt-1" />
+                  )}
+                </div>
+              </div>
+            </li>
 
+            {introDropdownOpen && (
+              <>
+                <Link href="/adminDashboard/introduction/create">
+                  <li className={`px-4`}>
+                    <div
+                      className={`flex p-2 rounded-md hover:bg-amber-400 ${
+                        router.pathname === "" ? "bg-amber-500" : ""
+                      }`}
+                    >
+                      <PiDotFill className="mr-2 mt-1" />{" "}
+                      <h1 className="font-bold">Create New</h1>
+                    </div>
+                  </li>
+                </Link>
+
+                <Link href="/adminDashboard/introduction/list">
+                  <li className={`px-4`}>
+                    <div
+                      className={`flex p-2 rounded-md hover:bg-amber-400 ${
+                        router.pathname === "" ? "bg-amber-500" : ""
+                      }`}
+                    >
+                      <PiDotFill className="mr-2 mt-1" />{" "}
+                      <h1 className="font-bold">List</h1>
+                    </div>
+                  </li>
+                </Link>
+              </>
+            )}
+          </div>
           <div>
             <li className={`px-4 py-1`}>
               <div

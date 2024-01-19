@@ -24,6 +24,11 @@ const NavbarFour = () => {
       href: "/",
     },
     {
+      name: "Introduction",
+      href: "#",
+      sublinks: [],
+    },
+    {
       name: "Courses",
       href: "/courses",
       sublinks: [],
