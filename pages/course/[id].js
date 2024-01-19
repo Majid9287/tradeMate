@@ -119,15 +119,18 @@ function ProductForm() {
                 </span>
                 {selectedChapter === chapter._id && (
                   <div className="px-4 md:text-2xl pb-4">
+                    {chapter.videos.length>0&&
                     <div className="flex border-t-2 border-black" onClick={() => handleMaterialClick("video")}>
-                      <FaRegFileVideo className="mt-1" /> <span >{chapter.videos[0].title}</span>
-                    </div>
+                     <FaRegFileVideo className="mt-1" /> <span >{chapter.videos[0].title}</span>
+                    </div>}
+                    {chapter.summary.length>0&&
                     <div className="flex border-y-2 border-black" onClick={() => handleMaterialClick("summary")}>
                       <MdOutlineSummarize className="mt-1" /> {chapter.summary[0]?.title}
-                    </div>
+                    </div>}
+                    {chapter.assignments.length>0&&
                     <div className="flex border-b-2 border-black" onClick={() => handleMaterialClick("assignment")}>
                       <MdAssignment className="mt-1" /> {chapter.assignments[0]?.title}
-                    </div>
+                    </div>}
                   </div>
                 )}
               </div>
