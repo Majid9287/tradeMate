@@ -93,6 +93,20 @@ function ProductForm() {
           console.log(data.course);
           if (data) {
             setCourse(data.course);
+            setSelectedChapter(course.chapters[0]?._id);
+  
+            // Check for the availability of each type of material in the selected chapter
+            const selectedChapterData = course.chapters.find((chapter) => chapter._id === selectedChapter);
+            if (selectedChapterData) {
+              if (selectedChapterData.videos.length > 0) {
+                setSelectedMaterial("video");
+                setVideoUrl(selectedChapterData.videos[0]?.video_url);
+              } else if (selectedChapterData.summary.length > 0) {
+                setSelectedMaterial("summary");
+              } else if (selectedChapterData.assignments.length > 0) {
+                setSelectedMaterial("assignment");
+              }
+            }
           } else {
             console.error("not found");
           }
