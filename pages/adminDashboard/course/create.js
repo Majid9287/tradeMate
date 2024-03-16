@@ -471,7 +471,7 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
           ) : (
             <div>
               {/* Display the list of uploaded chapters in a table */}
-              {chapters.length > 0 && (
+              {chapters.length > 0 && (<div className="overflow-x-auto ">
                 <table className="table-fixed w-full justify-center text-center border-collapse border border-green-800">
                   <thead>
                     <tr>
@@ -512,7 +512,7 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table></div>
               )}
               <div className="flex justify-center my-2 rounded-sm">
                 <button

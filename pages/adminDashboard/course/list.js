@@ -92,7 +92,8 @@ const CardList = () => {
           </div>
        }
         {courses.length > 0 ? (
-          <table className="min-w-full  bg-white border border-gray-400 shadow-sm rounded-md ">
+          <div className="overflow-x-auto ">
+          <table className="min-w-full bg-white border border-gray-400 shadow-sm rounded-md ">
             <thead className="bg-gray-100 text-md border-b font-bold border-gray-400">
               <tr>
                 <th className="px-6 py-3 text-left   text-black uppercase">
@@ -161,7 +162,7 @@ const CardList = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         ):  (  !loading && <div className="flex justify-center">Data not found</div>
         )}
          {showConfirmation && (

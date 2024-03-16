@@ -57,7 +57,7 @@ const CardList = () => {
             </svg>
           </div>
         }
-        {cardData.length > 0 ? (
+        {cardData.length > 0 ? (<div className="overflow-x-auto ">
           <table className="min-w-full bg-white border border-gray-400 shadow-sm rounded-md ">
             <thead className="bg-gray-100 border-b border-gray-400">
               <tr>
@@ -100,7 +100,7 @@ const CardList = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
        ) :  (  !loading && <div className="flex justify-center">Data not found</div>
        )}
       </div>

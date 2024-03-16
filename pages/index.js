@@ -348,7 +348,7 @@ export default function Home() {
 
                   <div className="intro px-4 lg:px-32">
                     <p className="text-sm mb-4">
-                      This investment calculator is designed to be a unique and
+                      This Risk calculator is designed to be a unique and
                       informative tool. It helps you estimate potential outcomes
                       based on your investment amount and risk tolerance. By
                       providing these inputs, you can gain valuable insights
