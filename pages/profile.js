@@ -2,12 +2,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-function UserProfile({ UserId, token }) {
+import { getSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+
+import styles from "@/styles/Color.module.css";
+function UserProfile({ token }) {
   const [name, setName] = useState("");
+  const [UserId, setUserId] = useState(null);
+
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [isAdmin, setIsAdmin] = useState("");
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [oldpassword, setOldPassword] = useState("");
@@ -16,36 +21,38 @@ function UserProfile({ UserId, token }) {
   const [passwordError, setpasswordError] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingpassword, setLoadingpassword] = useState(false);
-  console.log(token, UserId);
-  useEffect(() => {
-
-    const timer = setTimeout(() => {
-        if (!token || !UserId) {
-            router.push("/");
-          }
-      }, 500); 
-      return () => clearTimeout(timer);
-    
-  }, [token,UserId, router]);
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
 
   useEffect(() => {
-    const fetchCourseDetails = async () => {
+    setCredentials({ email: email, password: oldpassword });
+  }, [oldpassword]);
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const session = await getSession();
+
+      if (session && session.user.email) {
+        setEmail(session.user.email);
+        // Call fetchCourseDetails only after setting the email
+        fetchCourseDetails(session.user.email);
+      }
+    };
+
+    const fetchCourseDetails = async (email) => {
       try {
-        const res = await fetch(`/api/user/get-user?id=${UserId}`);
+        const res = await fetch(`/api/user/get-user?email=${email}`);
         const data = await res.json();
+
         setName(data.name);
         setAddress(data.address);
         setPhone(data.phone);
-        setEmail(data.email);
-        setIsAdmin(data.isAdmin);
+        setUserId(data._id);
       } catch (error) {
         console.error(error);
       }
     };
-    if (UserId) {
-      fetchCourseDetails();
-    }
-  }, [token, router]);
+
+    checkAdminStatus();
+  }, [router]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -137,20 +144,12 @@ function UserProfile({ UserId, token }) {
       return;
     }
 
-    const formData = {
-      email,
-      password: oldpassword,
-    };
     try {
-      const response = await fetch("/api/user/signin", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const result = await signIn("credentials", {
+        redirect: false,
+        ...credentials,
       });
-
-      if (response.ok) {
+      if (result.ok) {
         fetch("/api/user/password-update", {
           method: "POST",
           headers: {
@@ -158,8 +157,8 @@ function UserProfile({ UserId, token }) {
           },
           body: JSON.stringify({ email, password }),
         })
-          .then((response) => {
-            if (!response.ok) {
+          .then((result) => {
+            if (!result.ok) {
               toast.error("Error occurred while resetting password!", {
                 position: "top-right",
                 autoClose: 1000,
@@ -205,7 +204,7 @@ function UserProfile({ UserId, token }) {
             setLoadingpassword(false);
           });
       }
-      if (!response.ok) {
+      if (!result.ok) {
         toast.error("Please enter valide crdientials!", {
           position: "top-right",
           autoClose: 1000,
@@ -235,7 +234,7 @@ function UserProfile({ UserId, token }) {
   };
 
   return (
-    <div className=" bg-gray-100 flex justify-center items-center min-h-screen ">
+    <div className={`flex justify-center items-center min-h-screen ${styles.customcolor}`}>
       <ToastContainer
         position="top-right"
         autoClose={1000}
@@ -248,7 +247,7 @@ function UserProfile({ UserId, token }) {
         pauseOnHover
         theme="light"
       />
-      <div className="bg-white  relative max-w-lg w-full p-6 rounded-lg shadow-lg my-24 mx-2 ">
+      <div className="bg-gray-300  relative max-w-lg w-full p-6 rounded-lg shadow-lg my-24 mx-2 ">
         <div className="flex justify-center items-center py-8">
           <div className="flex-shrink-0 h-30 w-30">
             <img

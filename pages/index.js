@@ -20,202 +20,6 @@ import Lottie from "lottie-react";
 import styles from "@/styles/Color.module.css";
 import NewsCard from "@/components/NewsCard";
 
-const newsData = [
-  {
-    id: 1,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Breaking News: NASA's Artemis I mission successfully splashes down",
-  },
-  {
-    id: 2,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Top Story: Elon Musk's Twitter takeover hits snag as court rules against him",
-  },
-  {
-    id: 3,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Exclusive Report: Uncovered details of China's 'spy balloon' program",
-  },
-  {
-    id: 4,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline: "Latest Development: War in Ukraine enters its 272nd day",
-  },
-  {
-    id: 5,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Expert Opinion: Climate change 'irreversible' without urgent action",
-  },
-  {
-    id: 6,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    image: "https://ichef.bbci.co.uk/news/976x549/976/webp/p0.6w1s.s.jpg",
-    headline:
-      "In-Depth Coverage: World leaders gather for COP27 climate summit",
-  },
-  {
-    id: 7,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline: "Local Impact: Rising inflation hits food banks across the UK",
-  },
-  {
-    id: 8,
-    date: "2023-11-15",
-    image: "https://ichef.bbci.co.uk/news/976x549/976/webp/p0.6w28.s.jpg",
-    headline:
-      "International Response: G7 leaders pledge to provide $100 billion in aid for Ukraine",
-  },
-  {
-    id: 9,
-    date: "2023-11-15",
-    image: "https://ichef.bbci.co.uk/news/976x549/976/webp/p0.6w2e.s.jpg",
-    headline:
-      "Expert Analysis: Breaking down the implications of the US midterm elections",
-  },
-  {
-    id: 12,
-    date: "2023-11-04",
-    image: "https://example.com/news-image12.jpg",
-    headline: "Education Insights: Future of Learning",
-  },
-  {
-    id: 13,
-    date: "2023-11-03",
-    image: "https://example.com/news-image13.jpg",
-    headline: "Food and Cuisine: Culinary Delights",
-  },
-  {
-    id: 14,
-    date: "2023-11-02",
-    image: "https://example.com/news-image14.jpg",
-    headline: "Technology Trends: Innovations Unleashed",
-  },
-  {
-    id: 15,
-    date: "2023-11-01",
-    image: "https://example.com/news-image15.jpg",
-    headline: "Sports News: Championship Victory",
-  },
-  {
-    id: 1,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Breaking News: NASA's Artemis I mission successfully splashes down",
-  },
-  {
-    id: 2,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Top Story: Elon Musk's Twitter takeover hits snag as court rules against him",
-  },
-  {
-    id: 3,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Exclusive Report: Uncovered details of China's 'spy balloon' program",
-  },
-  {
-    id: 4,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline: "Latest Development: War in Ukraine enters its 272nd day",
-  },
-  {
-    id: 5,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Expert Opinion: Climate change 'irreversible' without urgent action",
-  },
-];
-const posts = [
-  {
-    category: "Design",
-    title: "10 Tips for Crafting the Perfect UX Portfolio",
-    description:
-      "Learn how to showcase your design skills and stand out in a crowded job market.",
-    author: "Emily Lee",
-    date: "3 April 2023",
-    avatar:
-      "https://www.uifaces.co/wp-content/uploads/2022/01/uifaces-logo.svg",
-    poster:
-      "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80",
-  },
-  {
-    category: "Technology",
-    title: "The Future of Mobile App Development",
-    description:
-      "Discover the latest trends and techniques that will shape the future of mobile app development.",
-    author: "John Smith",
-    date: "1 April 2023",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    poster:
-      "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-  },
-  {
-    category: "Business",
-    title: "How to Launch a Successful Startup",
-    description:
-      "Learn the essential steps to launch a successful startup and make your dreams a reality.",
-    author: "Sarah Brown",
-    date: "28 March 2023",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    poster:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-  },
-  {
-    category: "Health",
-    title: "The Benefits of Mindfulness Meditation",
-    description:
-      "Discover the scientifically proven benefits of mindfulness meditation and how it can improve your health and wellbeing.",
-    author: "David Kim",
-    date: "25 March 2023",
-    avatar: "https://randomuser.me/api/portraits/men/46.jpg",
-    poster:
-      "https://images.unsplash.com/photo-1591228127791-8e2eaef098d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-  },
-];
-const post = {
-  title: "12 Content Marketing Hacks to Increase Your Traffic and Leads",
-  author: "Hajra Naz",
-  category: "Sports",
-  date: "a day ago",
-  poster:
-    "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-
-  views: 25,
-  content: `
-    Are you seeking to increase the traffic to your website?
-    Content marketing offers an effective avenue to achieve that goal.
-    Sharing is caring!
-  `,
-};
 const cardData = [
   {
     icon: (
@@ -311,6 +115,73 @@ const cardData = [
 export default function Home() {
   const router = useRouter();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [blogs, setblogs] = useState([]);
+  const [investment, setInvestment] = useState(0);
+  const [risk, setRisk] = useState(0);
+  const [results, setResults] = useState({
+    dailyTarget: 0,
+    dailyDrawdown: 0,
+    weeklyTarget: 0,
+    monthlyTarget: 0,
+  });
+  const [error, setError] = useState("");
+
+  const calculateResults = () => {
+    setError("");
+  
+    if (isNaN(parseFloat(investment)) || isNaN(parseFloat(risk))) {
+      setError("Please enter valid numbers for investment and risk.");
+      return;
+    }
+  
+    const investmentAmount = parseFloat(investment);
+    const riskPercentage = parseFloat(risk) / 100; // Convert risk to a decimal
+  
+    const dailyTarget = investmentAmount * riskPercentage;
+    const dailyDrawdown = dailyTarget;
+    const weeklyTarget = dailyTarget * 5;
+    const monthlyTarget = weeklyTarget * 4;
+  
+    setResults({ dailyTarget, dailyDrawdown, weeklyTarget, monthlyTarget });
+  };
+  
+
+  const finnhub = require("finnhub");
+
+  const api_key = finnhub.ApiClient.instance.authentications["api_key"];
+  api_key.apiKey = "cnnk8q1r01qpkl7d2gm0cnnk8q1r01qpkl7d2gmg";
+  const finnhubClient = new finnhub.DefaultApi();
+
+  const [newsData, setNewsData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        finnhubClient.marketNews("forex", {}, (error, data, response) => {
+          console.log(data);
+          setNewsData(data);
+        });
+      } catch (error) {
+        console.error("Error fetching news data:", error.message);
+        toast.error("Error fetching news data");
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/blog/get-all");
+        const data = await response.json();
+        setblogs(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const settings = {
     dots: true,
@@ -463,10 +334,100 @@ export default function Home() {
           <section>
             <MarketOverviewWidget />
           </section>
+          <section className="py-2 pt-12 text-white">
+            <div
+              className={` rounded-full p-4  transition duration-300 ease-in-out ${styles.customcolor1}`}
+            >
+              <div className="lg:flex lg:items-start lg:space-x-6 py-12">
+                <div className="text-center">
+                  <h2 className="text-4xl  font-extrabold mb-4 uppercase">
+                    Risk Calculator
+                  </h2>
 
-          <section className="py-8 lg:pb-24">
+                  {error && <p className="text-red-500 mb-4">{error}</p>}
+
+                  <div className="intro px-4 lg:px-32">
+                    <p className="text-sm mb-4">
+                      This investment calculator is designed to be a unique and
+                      informative tool. It helps you estimate potential outcomes
+                      based on your investment amount and risk tolerance. By
+                      providing these inputs, you can gain valuable insights
+                      into how your investment may perform under different risk
+                      scenarios.
+                    </p>
+                  </div>
+
+                  <div className="lg:flex justify-center lg:space-x-8 text-lg font-extrabold">
+                    <div className="">
+                      <p>Investment($): </p>
+                      <input
+                        type="number"
+                        className="p-2 rounded-lg text-black"
+                        value={investment}
+                        onChange={(e) => setInvestment(e.target.value)}
+                      />
+                    </div>
+                    <div className="">
+                      <p>Risk(%): </p>
+                      <input
+                        type="number"
+                        className="p-2 rounded-lg text-black"
+                        value={risk}
+                        onChange={(e) => setRisk(e.target.value)}
+                      />
+                    </div>
+                    <div className="mt-1">
+                      
+                      <button className="bg-blue-500 p-2 mt-6 rounded-lg" onClick={calculateResults}>Calculate</button>
+                    </div>
+                  </div>
+
+                  <div className="mt-2 text-lg font-extrabold">
+                    <div>
+                      <h1>Results:</h1>
+                    </div>{" "}
+                    <div className="mt-1 flex justify-center">
+                      <table className="table-auto border">
+                        <tbody>
+                          <tr>
+                            <td className="px-4 py-2 border">Daily Target:</td>
+                            <td className="px-4 py-2">
+                              {results.dailyTarget}$
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 border">
+                              Daily Drawdown:
+                            </td>
+                            <td className="px-4 py-2">
+                              {results.dailyDrawdown}$
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 border">Weekly Target:</td>
+                            <td className="px-4 py-2">
+                              {results.weeklyTarget}$
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 border">
+                              Monthly Target:
+                            </td>
+                            <td className="px-4 py-2">
+                              {results.monthlyTarget}$
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="py-2 lg:pb-24">
             <div className="flext justify-center text-center ">
-              <div className="pt-24 pb-12 ">
+              <div className="pt-12 pb-12 ">
                 <div className=" flex py-2 justify-center text-center">
                   <h1
                     className={`text-4xl rounded-full  font-extrabold px-6 py-2 ${styles.gradientBg}`}
@@ -486,9 +447,115 @@ export default function Home() {
             </div>
 
             <div className=" justify-center grid gap-2 gap-y-10 pb-6 md:grid-cols-2 lg:grid-cols-2">
-              {posts.map((post) => (
-                <BlogCard key={post.title} post={post} />
-              ))}
+            {blogs.length > 0 ? 
+    blogs.map((post) => (
+        <BlogCard key={post.title} post={post} />
+    )) 
+    : null
+}
+
+            </div>
+          </section>
+          <section className="py-32 ">
+            <div className="container mx-auto">
+              <div
+                className={`block rounded-lg shadow-lg pt-10 md:pt-12 px-2 md:px-6 ${styles.customcolor1}`}
+                style={{
+                  marginTop: "-100px",
+                  backdropFilter: "blur(30px)",
+                }}
+              >
+                <div className="flex flex-wrap items-center justify-center ">
+                  <div className="grow-0 shrink-0 basis-auto w-full xl:w-7/12 ">
+                    <div className="flex justify-center text-center">
+                      <div className="">
+                        <h2 className="text-4xl lg:text-5xl font-bold leading-tight mb-8">
+                          News
+                        </h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={`max-w-screen-xl mt-24 lg:px-8 py-16 mx-auto rounded-lg shadow-lg ${styles.customcolor}`}
+                >
+                  <section className="">
+                    <div className="lg:flex lg:items-start  ">
+                      <div className="lg:w-1/3 pr-1 ">
+                        {newsData.length > 0 && (
+                          <div className="max-w-md pt-1 mx-auto rounded shadow-xl overflow-hidden md:max-w-2xl">
+                            <Link
+                              className="md:flex"
+                              href={`/news/[category]/[id]`}
+                              as={`/news/${newsData[0]?.category}/${newsData[0]?.id}`}
+                            >
+                              <div className="md:shrink-0">
+                                <img
+                                  className="h-48 w-full rounded object-cover md:h-full md:w-48"
+                                  src={newsData[0]?.image || ""}
+                                  alt="News headline"
+                                />
+                              </div>
+                              <div className="pl-1">
+                                <div
+                                  className={`uppercase tracking-wide text-sm text-indigo-500 font-semibold ${styles.customtext}`}
+                                >
+                                  {newsData[0]?.category || ""}
+                                </div>
+                                <a
+                                  href="#"
+                                  className="block mt-1 text-lg leading-tight font-bold hover:underline"
+                                >
+                                  {newsData[1]?.headline || ""}
+                                </a>
+                              </div>
+                            </Link>
+                          </div>
+                        )}
+                        <div className="grid gap-1 pt-2 grid-cols-1 md:grid-cols-1 ">
+                          {newsData.slice(1, 5).map((news) => (
+                            <NewsCard
+                              key={news.id}
+                              date={news.category}
+                              id={news.id}
+                              category={news.category}
+                              image={news.image}
+                              headline={news.headline}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="lg:w-2/3">
+                        <div className="grid gap-1 pb-6 grid-cols-1 md:grid-cols-2 ">
+                          {newsData.slice(2, 14).map((news) => (
+                            <NewsCard
+                              key={news.id}
+                              id={news.id}
+                              category={news.category}
+                              date={news.category}
+                              image={news.image}
+                              headline={news.headline}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center text-center">
+                      {" "}
+                      <Link href="/news">
+                        <div>
+                          <h1
+                            className={`text-lg rounded-full  font-extrabold px-6 py-2 ${styles.gradientBg}`}
+                          >
+                            More News
+                          </h1>
+                        </div>
+                      </Link>
+                    </div>
+                  </section>
+                </div>
+              </div>
             </div>
           </section>
         </div>

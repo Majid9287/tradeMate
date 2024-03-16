@@ -14,10 +14,7 @@ const SignInThree = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const handleGoogleSignIn = async () => {
-    const result = await signIn('google');
-    // Handle the result as needed (e.g., redirect to a dashboard on success).
-  };
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -128,7 +125,7 @@ const SignInThree = () => {
                     {' '}
                     Password{' '}
                   </label>
-                  <a href="#" title="" className="text-sm font-semibold hover:underline">
+                  <a href="/forget" title="" className="text-sm font-semibold hover:underline">
                     {' '}
                     Forgot password?{' '}
                   </a>
@@ -180,19 +177,7 @@ const SignInThree = () => {
               </div>
             </div>
           </form>
-          <div className="mt-3 space-y-3">
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              className="relative inline-flex w-full items-center justify-center rounded-md border border-gray-400 bg-white px-3.5 py-2.5 font-semibold text-gray-700 transition-all duration-200 hover:bg-gray-100 hover:text-black focus:bg-gray-100 focus:text-black focus:outline-none"
-            >
-              <span className="mr-2 inline-block">
-                <FcGoogle />
-              </span>
-              Sign in with Google
-            </button>
-
-          </div>
+         
         </div>
        
         </Tilt>

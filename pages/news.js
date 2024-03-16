@@ -1,119 +1,43 @@
-import React from "react";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 import styles from "@/styles/Color.module.css";
+import NewsCard from "@/components/NewsCard";
+import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import NewsCard from "@/components/NewsCard";
+function Contact() {
+  const finnhub = require("finnhub");
 
-import { FaEnvelope } from "react-icons/fa";
-const newsData = [
-  {
-    id: 1,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Breaking News: NASA's Artemis I mission successfully splashes down",
-  },
-  {
-    id: 2,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Top Story: Elon Musk's Twitter takeover hits snag as court rules against him",
-  },
-  {
-    id: 3,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Exclusive Report: Uncovered details of China's 'spy balloon' program",
-  },
-  {
-    id: 4,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline: "Latest Development: War in Ukraine enters its 272nd day",
-  },
-  {
-    id: 5,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline:
-      "Expert Opinion: Climate change 'irreversible' without urgent action",
-  },
-  {
-    id: 6,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    image: "https://ichef.bbci.co.uk/news/976x549/976/webp/p0.6w1s.s.jpg",
-    headline:
-      "In-Depth Coverage: World leaders gather for COP27 climate summit",
-  },
-  {
-    id: 7,
-    date: "2023-11-15",
-    image:
-      "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
-    headline: "Local Impact: Rising inflation hits food banks across the UK",
-  },
-  {
-    id: 8,
-    date: "2023-11-15",
-    image: "https://ichef.bbci.co.uk/news/976x549/976/webp/p0.6w28.s.jpg",
-    headline:
-      "International Response: G7 leaders pledge to provide $100 billion in aid for Ukraine",
-  },
-  {
-    id: 9,
-    date: "2023-11-15",
-    image: "https://ichef.bbci.co.uk/news/976x549/976/webp/p0.6w2e.s.jpg",
-    headline:
-      "Expert Analysis: Breaking down the implications of the US midterm elections",
-  },
-  {
-    id: 12,
-    date: "2023-11-04",
-    image: "https://example.com/news-image12.jpg",
-    headline: "Education Insights: Future of Learning",
-  },
-  {
-    id: 13,
-    date: "2023-11-03",
-    image: "https://example.com/news-image13.jpg",
-    headline: "Food and Cuisine: Culinary Delights",
-  },
-  {
-    id: 14,
-    date: "2023-11-02",
-    image: "https://example.com/news-image14.jpg",
-    headline: "Technology Trends: Innovations Unleashed",
-  },
-  {
-    id: 15,
-    date: "2023-11-01",
-    image: "https://example.com/news-image15.jpg",
-    headline: "Sports News: Championship Victory",
-  },
-];
-function contact() {
+  const api_key = finnhub.ApiClient.instance.authentications["api_key"];
+  api_key.apiKey = "cnnk8q1r01qpkl7d2gm0cnnk8q1r01qpkl7d2gmg";
+  const finnhubClient = new finnhub.DefaultApi();
+
+  const [newsData, setNewsData] = useState([]);
+  const [cat, setCat] = useState("forex");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        finnhubClient.marketNews(`${cat}`, {}, (error, data, response) => {
+          console.log(data);
+          setNewsData(data);
+        });
+      } catch (error) {
+        console.error("Error fetching news data:", error.message);
+        toast.error("Error fetching news data");
+      }
+    };
+    fetchData();
+  }, [cat]);
+
   return (
     <div>
-      <div className={` text-white top-0  ${styles.customcolor}`}>
+      <div className={`text-white top-0 ${styles.customcolor}`}>
         <section className="py-32 ">
-          <div className="container  mx-auto  ">
+          <div className="container mx-auto">
             <div
-              className={`block rounded-lg shadow-lg pt-10 md:pt-12 px-2 md:px-6  ${styles.customcolor1}`}
+              className={`block rounded-lg shadow-lg pt-10 md:pt-12 px-2 md:px-6 ${styles.customcolor1}`}
               style={{
                 marginTop: "-100px",
-
                 backdropFilter: "blur(30px)",
               }}
             >
@@ -128,68 +52,49 @@ function contact() {
                   </div>
                 </div>
               </div>
-
+              <div className="flex justify-center text-center">
+                {" "}
+               
+                  <div className="flex ">
+                    <button
+                      className={`text-lg mx-2 cursor-pointer rounded-full  font-extrabold px-6 py-2 ${styles.customcolor}`}
+                    onClick={()=>setCat("forex")}>
+                      Forex
+                    </button>
+                    <button
+                      className={`text-lg mx-2 cursor-pointer rounded-full  font-extrabold px-6 py-2 ${styles.customcolor}`}
+                      onClick={()=>setCat("crypto")}>
+                     Crypto
+                    </button>
+                    <button
+                      className={`text-lg mx-2 cursor-pointer rounded-full  font-extrabold px-6 py-2 ${styles.customcolor}`}
+                      onClick={()=>setCat("general")}>
+                     General
+                    </button>
+                  </div>
+                
+              </div>
               <div
-                className={`max-w-screen-xl mt-24 lg:px-8 py-16 mx-auto   rounded-lg shadow-lg ${styles.customcolor}`}
+                className={`max-w-screen-xl mt-8 lg:px-8 py-16 mx-auto rounded-lg shadow-lg ${styles.customcolor}`}
               >
-                 <section className="">
-          
-           
-
-            <div className="lg:flex lg:items-start  ">
-              <div className="lg:w-1/3 pr-1 ">
-                <div className="max-w-md pt-1  mx-auto  rounded shadow-xl overflow-hidden md:max-w-2xl">
-                  <div className="md:flex">
-                    <div className="md:shrink-0">
-                      <img
-                        className="h-48 w-full rounded object-cover md:h-full md:w-48"
-                        src={newsData[0].image}
-                        alt="Modern building architecture"
-                      />
-                    </div>
-                    <div className="pl-1">
-                      <div
-                        className={`uppercase tracking-wide text-sm text-indigo-500 font-semibold ${styles.customtext}`}
-                      >
-                        {newsData[0].date}
+                <section className="">
+                  <div className="lg:flex lg:items-start  ">
+                    <div className="">
+                      <div className="grid gap-1 pb-6 grid-cols-1 md:grid-cols-3 ">
+                        {newsData.map((news) => (
+                          <NewsCard
+                          key={news.id}
+                          id={news.id}
+                          category={news.category}
+                          date={news.category}
+                          image={news.image}
+                          headline={news.headline}
+                          />
+                        ))}
                       </div>
-                      <a
-                        href="#"
-                        className="block mt-1 text-lg leading-tight font-bold  hover:underline"
-                      >
-                        {newsData[0].headline}
-                      </a>
-                      
-                     
                     </div>
                   </div>
-                </div>
-                <div className="grid gap-1 pt-2 grid-cols-1 md:grid-cols-1 ">
-              {newsData.slice(1,5).map((news) => (
-                <NewsCard
-                  key={news.id}
-                  date={news.date}
-                  image={news.image}
-                  headline={news.headline}
-                />
-              ))}
-            </div>
-              </div>
-              <div className="lg:w-2/3">
-              <div className="grid gap-1 pb-6 grid-cols-1 md:grid-cols-2 ">
-              {newsData.slice(2,14).map((news) => (
-                <NewsCard
-                  key={news.id}
-                  date={news.date}
-                  image={news.image}
-                  headline={news.headline}
-                />
-              ))}
-            </div>
-              </div>
-            </div>
-            
-          </section>
+                </section>
               </div>
             </div>
           </div>
@@ -199,4 +104,4 @@ function contact() {
   );
 }
 
-export default contact;
+export default Contact;

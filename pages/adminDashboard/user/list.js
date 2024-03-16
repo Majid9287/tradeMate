@@ -6,7 +6,8 @@ import { BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import withAdminRoute from '../Auth/withAdminAuth';
+import withAdminRoute from "../Auth/withAdminAuth";
+
 function UserTable({ isUserLoggedIn, isAdmin }) {
   const [users, setUsers] = useState([]);
   const [activeTab, setActiveTab] = useState("details");
@@ -20,7 +21,7 @@ function UserTable({ isUserLoggedIn, isAdmin }) {
 
   return (
     <AdminLayout>
-      <div className="flex flex-col bg-gray-100 pt-24 relative min-h-screen">
+      <div className="flex flex-col bg-gray-100  relative min-h-screen">
         <ToastContainer
           position="top-right"
           autoClose={1000}
@@ -33,38 +34,10 @@ function UserTable({ isUserLoggedIn, isAdmin }) {
           pauseOnHover
           theme="light"
         />
-        <div className="flex  mx-2  text-gray-500 uppercase ">
-          <div
-            className={`cursor-pointer ${
-              activeTab === "user"
-                ? "text-blue-500 border-b-4 border-blue-500"
-                : ""
-            }`}
-            onClick={() => setActiveTab("user")}
-          >
-            User
-          </div>
-          <div
-            className={`cursor-pointer px-2 ${
-              activeTab === "admin"
-                ? "text-blue-500 border-b-4 border-blue-500"
-                : ""
-            }`}
-            onClick={() => setActiveTab("admin")}
-          >
-            Admin
-          </div>
-          <div
-            className={`cursor-pointer px-2 ${
-              activeTab === "author"
-                ? "text-blue-500 border-b-4 border-blue-500"
-                : ""
-            }`}
-            onClick={() => setActiveTab("author")}
-          >
-            Author Moderator Editor Subscriber
-          </div>
+        <div className="flex items-center justify-between mb-6 pt-12 uppercase p-1">
+          <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
         </div>
+        <div className="flex  mx-2  text-gray-500 uppercase "></div>
         <hr className=" border-t border-gray-500 mb-4" />
         <div className="-my-2  overflow-x-auto">
           <div className="py-2 align-middle inline-block min-w-full sm:px-2 lg:px-2">
@@ -90,12 +63,7 @@ function UserTable({ isUserLoggedIn, isAdmin }) {
                     >
                       Role
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                    >
-                      Permissions
-                    </th>
+
                     <th
                       scope="col"
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -137,16 +105,24 @@ function UserTable({ isUserLoggedIn, isAdmin }) {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-500">{user.role}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
-                          {user.permissions}
-                        </div>
+
+                      <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-lg font-medium text-blue-500">
+                        <Link
+                          href={`/adminDashboard/user/update/[email]`}
+                          as={`/adminDashboard/user/update/${user.email}`}
+                        >
+                          {" "}
+                          <BiEdit />
+                        </Link>
                       </td>
-                      <td className="px-6 py-4 cursor-pointer whitespace-nowrap text-3xl font-medium text-gray-500">
-                        <BiEdit />
-                      </td>
-                      <td className="px-6 cursor-pointer py-4 whitespace-nowrap text-3xl font-medium text-gray-500">
-                        <BsArrowRight />
+
+                      <td className="px-6 cursor-pointer py-4 whitespace-nowrap text-lg font-medium text-blue-500">
+                        <Link
+                          href={`/adminDashboard/user/[email]`}
+                          as={`/adminDashboard/user/${user.email}`}
+                        >
+                          <BsArrowRight />
+                        </Link>
                       </td>
                     </tr>
                   ))}
@@ -161,4 +137,3 @@ function UserTable({ isUserLoggedIn, isAdmin }) {
 }
 const AdminProtectedCourseForm = withAdminRoute(UserTable);
 export default AdminProtectedCourseForm;
-

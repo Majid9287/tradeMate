@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "node_modules/react-quill/dist/quill.snow.css";
 import React from "react";
 import dynamic from "next/dynamic";
@@ -8,21 +8,39 @@ const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 });
 import "react-quill/dist/quill.snow.css";
 
-import AdminLayout from "../../../components/AdminDashboard/AdminLayout";
+import AdminLayout from "../../../../components/AdminDashboard/AdminLayout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-tagsinput/react-tagsinput.css"; // Import the styles
 import TagsInput from "react-tagsinput";
-import withAdminRoute from "../Auth/withAdminAuth";
+import withAdminRoute from "../../Auth/withAdminAuth";
+import { useRouter } from "next/router";
 function CourseForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState([]);
   const [coverPhoto, setCoverPhoto] = useState(null);
+  const router = useRouter();
+  const id = router.query.id;
 
+  const fetchData = async () => {
+    // Fetch course data including chapters
+    try {
+      const Response = await fetch(`/api/blog/get?id=${id}`);
+      const Data = await Response.json();
+      setTitle(Data.title);
+      setDescription(Data.description);
+      setContent(Data.content);
+      setCoverPhoto(Data.imageURL);
+    } catch (error) {
+      console.error("Error fetching course data:", error.message);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [router.query, id]);
   const handleRemovePhoto = () => {
     setPhoto(null);
     setCoverPhoto(null);
@@ -33,9 +51,7 @@ function CourseForm() {
     setPhoto(file);
     setCoverPhoto(URL.createObjectURL(file));
   };
-  const handleTagChange = (tags) => {
-    setTags(tags);
-  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -47,19 +63,14 @@ function CourseForm() {
     formData.append("image", photo);
 
     try {
-      const res = await fetch("/api/blog/add", {
-        method: "POST",
+      const res = await fetch(`/api/blog/update?id=${id}`, {
+        method: "PUT",
         body: formData,
       });
 
       const data = await res.json();
-      setTitle("");
-      setDescription("");
-      setContent("");
-      setTags([]);
-      setCoverPhoto(null);
-      setPhoto(null);
-      toast.success("Blog add successfully", {
+
+      toast.success("Update successfully", {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -85,8 +96,6 @@ function CourseForm() {
     }
   };
 
- 
-
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -111,7 +120,7 @@ function CourseForm() {
     <AdminLayout>
       <div className="h-full bg-gray-100 relative">
         <div className="container mx-auto px-4 relative bg-gray-100 py-24">
-        <ToastContainer
+          <ToastContainer
             position="top-right"
             autoClose={1000}
             hideProgressBar={false}
@@ -123,7 +132,7 @@ function CourseForm() {
             pauseOnHover
             theme="light"
           />
-          <h1 className="text-3xl font-bold mb-4">Create a New Post</h1>{" "}
+          <h1 className="text-3xl font-bold mb-4">Post: {id}</h1>
           {/* Add this line */}
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="bg-white p-4 my-2 rounded-lg shadow-sm flex flex-col md:flex-row">
@@ -153,19 +162,17 @@ function CourseForm() {
                   <label
                     htmlFor="description"
                     required
-                    
                     className="block text-gray-700 font-medium mb-1"
                   >
                     Short Description
                   </label>
                   <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     id="description"
                     className="border rounded px-3 py-2 w-full h-12"
                   ></textarea>
                 </div>
-              
               </div>
             </div>
             <div className="bg-white p-4 my-4 rounded-lg shadow-sm flex flex-col md:flex-row">
@@ -236,7 +243,6 @@ function CourseForm() {
               </div>
             </div>
 
-
             <div className="flex justify-end space-x-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -265,7 +271,7 @@ function CourseForm() {
                     ></path>
                   </svg>
                 ) : (
-                  "Post"
+                  "Update Post"
                 )}
               </button>
             </div>

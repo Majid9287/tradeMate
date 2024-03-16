@@ -1,7 +1,7 @@
 import Course from "../../../models/Course";
 import nextConnect from "next-connect";
-
 import connectDb from "../../../middlewhare/mongoos";
+
 const apiRoute = nextConnect({
   onError(error, req, res) {
     res
@@ -17,27 +17,16 @@ apiRoute.post(async (req, res) => {
   try {
     const { id } = req.query;
     const {
-      
       chapterNumber,
       chapterTitle,
       videoTitle,
       videoUrl,
       sTitle,
       summaryContent,
-      assignmentTitle, 
+      assignmentTitle,
       assignmentContent,
     } = req.body;
-    console.log(
-      id,
-      videoTitle,
-      chapterNumber,
-      chapterTitle,
-      videoUrl,
-      sTitle,
-      summaryContent,
-      assignmentTitle, 
-      assignmentContent,
-    );
+
     // Find the course by ID
     const course = await Course.findById(id);
 
@@ -49,10 +38,34 @@ apiRoute.post(async (req, res) => {
     const newChapter = {
       chapter_number: chapterNumber,
       title: chapterTitle,
-      videos: [{ title: videoTitle, video_url: videoUrl }],
-      summary: [{ title:  sTitle, content:  summaryContent }],
-      assignments: [{ title:   assignmentTitle,content:assignmentContent }],
+      videos: [],
+      summary: [],
+      assignments: [],
     };
+
+    // Add video to the chapter if both title and URL are provided
+    if (videoTitle && videoUrl) {
+      newChapter.videos.push({ title: videoTitle, video_url: videoUrl });
+    } else if (videoTitle || videoUrl) {
+      // If one is missing, return an error
+      return res.status(400).json({ error: "Both video title and URL are required." });
+    }
+
+    // Add summary to the chapter if both title and content are provided
+    if (sTitle && summaryContent) {
+      newChapter.summary.push({ title: sTitle, content: summaryContent });
+    } else if (sTitle || summaryContent) {
+      // If one is missing, return an error
+      return res.status(400).json({ error: "Both summary title and content are required." });
+    }
+
+    // Add assignment to the chapter if both title and content are provided
+    if (assignmentTitle && assignmentContent) {
+      newChapter.assignments.push({ title: assignmentTitle, content: assignmentContent });
+    } else if (assignmentTitle || assignmentContent) {
+      // If one is missing, return an error
+      return res.status(400).json({ error: "Both assignment title and content are required." });
+    }
 
     // Add the new chapter to the course
     course.chapters.push(newChapter);

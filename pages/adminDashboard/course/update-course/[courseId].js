@@ -4,23 +4,23 @@ import React from "react";
 import { MdDelete } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
 import Select from "react-select";
-import dynamic from "next/dynamic";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
-
-import ConfirmationModal from "../../../components/DeleteConfirmation";
+import ConfirmationModal from "../../../../components/DeleteConfirmation";
 import { IoClose } from "react-icons/io5";
 import "react-quill/dist/quill.snow.css";
-import AdminLayout from "../../../components/AdminDashboard/AdminLayout";
+import AdminLayout from "../../../../components/AdminDashboard/AdminLayout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import youtubeVideoId from "youtube-video-id";
-function ProductForm({ isUserLoggedIn, isAdmin }) {
+function ProductForm() {
   const router = useRouter();
+  const courseId = router.query.courseId;
 
   const [chapters, setChapters] = useState([]);
   const addChapterButtonText =
@@ -28,11 +28,11 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
 
   console.log("ch", chapters);
   const [Image, setImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("basicInfo");
-  const [courseId, setCourseId] = useState("");
 
   const [chapterNumber, setChapterNumber] = useState("");
   const [chapterTitle, setChapterTitle] = useState("");
@@ -55,23 +55,6 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
   });
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const fetchData = async () => {
-    // Fetch course data including chapters
-    try {
-      const courseResponse = await fetch(
-        `/api/course/get-by-id?id=${courseId}`
-      );
-      const courseData = await courseResponse.json();
-
-      // Set the chapters in the state
-      setChapters(courseData.course.chapters || []);
-    } catch (error) {
-      console.error("Error fetching course data:", error.message);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, [courseId]); // Fetch data whenever courseId changes
   const handleDelete = (Id) => {
     setSelectedChapter(Id);
     setShowConfirmation(true);
@@ -112,6 +95,24 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
     setSelectedChapter(null);
     setShowConfirmation(false);
   };
+  const fetchData = async () => {
+    // Fetch course data including chapters
+    try {
+      const courseResponse = await fetch(
+        `/api/course/get-by-id?id=${courseId}`
+      );
+      const courseData = await courseResponse.json();
+
+      // Set the chapters in the state
+      setChapters(courseData.course.chapters || []);
+    } catch (error) {
+      console.error("Error fetching course data:", error.message);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [courseId]); // Fetch data whenever courseId changes
+
   const handleOptionChange = (option) => {
     // Check if the selected option is the only one selected
     const isOnlyOption =
@@ -161,7 +162,7 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
     const id = extractVideoId(videoUrl);
     setVideoId(id);
   }, [videoUrl]);
-  const [selectedImage, setSelectedImage] = useState(null);
+
   const handleAddChapter = () => {
     setShow(true);
   };
@@ -254,18 +255,17 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
     formData.append("file", Image[0]);
     console.log(...formData);
     try {
-      const res = await fetch("/api/course/add", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `/api/course/update-course?courseId=${courseId}`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
 
       if (res.ok) {
-        const { _id } = await res.json();
-        // Set the course ID in the state
-        setCourseId(_id);
-        setActiveTab("Chapters");
         // Notify success
-        toast.success("Basic Info Save Successfully", {
+        toast.success("Update Course Successfully", {
           position: "top-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -276,7 +276,7 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
           theme: "light",
         });
       } else {
-        throw new Error("Failed to add course");
+        throw new Error("Failed to update course");
       }
 
       setLoading(false);
@@ -333,6 +333,25 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
     }
   };
 
+  const fetchDataOfCourse = async () => {
+    // Fetch course data including chapters
+    try {
+      const courseResponse = await fetch(
+        `/api/course/get-by-id?id=${courseId}`
+      );
+      const courseData = await courseResponse.json();
+
+      setSelectedImage(courseData.course.feature_img);
+      setTitle(courseData.course.title);
+      setDescription(courseData.course.description);
+    } catch (error) {
+      console.error("Error fetching course data:", error.message);
+    }
+  };
+  useEffect(() => {
+    fetchDataOfCourse();
+  }, [router.query, courseId]);
+
   return (
     <AdminLayout>
       <div className="h-full bg-gray-100 relative">
@@ -378,95 +397,116 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
           <hr className=" border-t border-gray-500 mb-4" />
           {activeTab === "basicInfo" ? (
             <form onSubmit={handleSubmit} encType="multipart/form-data">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/2 p-4">
-                  <div className="border h-80 border-gray-300 rounded-lg mb-4">
-                    {selectedImage && (
-                      <img
-                        src={selectedImage}
-                        alt="Selected Image"
-                        className="w-full h-full object-contain"
-                      />
-                    )}
-                    {!selectedImage ? (
-                      <div className="w-full h-full bg-gray-300"></div>
-                    ) : null}
+              {title ? (
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-1/2 p-4">
+                    <div className="border h-80 border-gray-300 rounded-lg mb-4">
+                      {selectedImage && (
+                        <img
+                          src={selectedImage}
+                          alt="Selected Image"
+                          className="w-full h-full object-contain"
+                        />
+                      )}
+                      {!selectedImage ? (
+                        <div className="w-full h-full bg-gray-300"></div>
+                      ) : null}
+                    </div>
+                    <div className="flex">
+                      <div className="w-full p-2">
+                        <input
+                          type="file"
+                          required
+                          accept="image/*"
+                          onChange={handleImageSelect}
+                          name="image" // Ensure the name attribute is set to "image"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex">
-                    <div className="w-full p-2">
+                  <div className="md:w-1/2 p-4">
+                    <div className="mb-2">
+                      <label
+                        className="block text-gray-700 font-bold mb-2"
+                        htmlFor="description"
+                      >
+                        Title
+                      </label>
                       <input
-                        type="file"
+                        type="text"
                         required
-                        accept="image/*"
-                        onChange={handleImageSelect}
-                        name="image" // Ensure the name attribute is set to "image"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Title"
+                        className="w-full mb-4 p-2 border border-gray-300 rounded"
                       />
+                    </div>
+                    <div className="mb-2">
+                      <label
+                        className="block text-gray-700 font-bold mb-2"
+                        htmlFor="description"
+                      >
+                        Description
+                      </label>
+                      <input
+                        type="text"
+                        value={description}
+                        required
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Short Description"
+                        className="w-full mb-4 p-2 border border-gray-300 rounded"
+                      />
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <svg
+                            aria-hidden="true"
+                            class="w-6 h-6 text-gray-400 animate-spin dark:text-gray-600 fill-white"
+                            viewBox="0 0 100 101"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                              fill="currentFill"
+                            />
+                          </svg>
+                        ) : (
+                          "Update Course"
+                        )}
+                      </button>
                     </div>
                   </div>
                 </div>
-                <div className="md:w-1/2 p-4">
-                  <div className="mb-2">
-                    <label
-                      className="block text-gray-700 font-bold mb-2"
-                      htmlFor="description"
-                    >
-                      Title
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Title"
-                      className="w-full mb-4 p-2 border border-gray-300 rounded"
+              ) : (
+                <div className=" flex justify-center">
+                  <svg
+                    aria-hidden="true"
+                    class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
                     />
-                  </div>
-                  <div className="mb-2">
-                    <label
-                      className="block text-gray-700 font-bold mb-2"
-                      htmlFor="description"
-                    >
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      value={description}
-                      required
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Short Description"
-                      className="w-full mb-4 p-2 border border-gray-300 rounded"
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentFill"
                     />
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <svg
-                          aria-hidden="true"
-                          class="w-6 h-6 text-gray-400 animate-spin dark:text-gray-600 fill-white"
-                          viewBox="0 0 100 101"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill"
-                          />
-                        </svg>
-                      ) : (
-                        "Save & Next"
-                      )}
-                    </button>
-                  </div>
+                  </svg>
                 </div>
-              </div>
+              )}
             </form>
           ) : (
             <div>
@@ -497,7 +537,7 @@ function ProductForm({ isUserLoggedIn, isAdmin }) {
                             as={`/adminDashboard/course/update/${courseId}/${chapter._id}`}
                           >
                             {" "}
-                            <button className="text-blue-500 text-lg mr-5">
+                            <button className="text-blue-500 text-lg ">
                               <BiEdit></BiEdit>
                             </button>
                           </Link>
