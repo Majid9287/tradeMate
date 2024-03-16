@@ -66,7 +66,7 @@ function ProductForm() {
       setSelectedChapter(course.chapters[0]?._id);
   
       // Check for the availability of each type of material in the selected chapter
-      const selectedChapterData = course.chapters.find((chapter) => chapter._id === selectedChapter);
+      const selectedChapterData = course.chapters.find((chapter) => chapter._id == selectedChapter);
       if (selectedChapterData) {
         if (selectedChapterData.videos.length > 0) {
           setSelectedMaterial("video");
@@ -96,7 +96,7 @@ function ProductForm() {
             setSelectedChapter(course.chapters[0]?._id);
   
             // Check for the availability of each type of material in the selected chapter
-            const selectedChapterData = course.chapters.find((chapter) => chapter._id === selectedChapter);
+            const selectedChapterData = course.chapters.find((chapter) => chapter._id ==selectedChapter);
             if (selectedChapterData) {
               if (selectedChapterData.videos.length > 0) {
                 setSelectedMaterial("video");
