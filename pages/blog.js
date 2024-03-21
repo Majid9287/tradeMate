@@ -43,7 +43,7 @@ const YourCarousel = () => {
           </div>
         </div>
         <div className="grid gap-6 gap-y-10 pb-6  md:grid-cols-2 ">
-          {blogs.map((post) => (
+          {blogs&&blogs.length>0&&blogs.map((post) => (
             <BlogCard key={post.title} post={post} />
           ))}
         </div>

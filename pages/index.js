@@ -447,7 +447,7 @@ export default function Home() {
             </div>
 
             <div className=" justify-center grid gap-2 gap-y-10 pb-6 md:grid-cols-2 lg:grid-cols-2">
-            {blogs.length > 0 ? 
+            {blogs&&blogs.length > 0 ? 
     blogs.map((post) => (
         <BlogCard key={post.title} post={post} />
     )) 
@@ -483,7 +483,7 @@ export default function Home() {
                   <section className="">
                     <div className="lg:flex lg:items-start  ">
                       <div className="lg:w-1/3 pr-1 ">
-                        {newsData.length > 0 && (
+                        {newsData&&newsData.length > 0 && (
                           <div className="max-w-md pt-1 mx-auto rounded shadow-xl overflow-hidden md:max-w-2xl">
                             <Link
                               className="md:flex"
@@ -514,7 +514,7 @@ export default function Home() {
                           </div>
                         )}
                         <div className="grid gap-1 pt-2 grid-cols-1 md:grid-cols-1 ">
-                          {newsData.slice(1, 5).map((news) => (
+                          {newsData&&newsData.length>0&&newsData.slice(1, 5).map((news) => (
                             <NewsCard
                               key={news.id}
                               date={news.category}
@@ -528,7 +528,7 @@ export default function Home() {
                       </div>
                       <div className="lg:w-2/3">
                         <div className="grid gap-1 pb-6 grid-cols-1 md:grid-cols-2 ">
-                          {newsData.slice(2, 14).map((news) => (
+                          {newsData&&newsData.length>0&&newsData.slice(2, 14).map((news) => (
                             <NewsCard
                               key={news.id}
                               id={news.id}

@@ -81,7 +81,7 @@ function Contact() {
                   <div className="lg:flex lg:items-start  ">
                     <div className="">
                       <div className="grid gap-1 pb-6 grid-cols-1 md:grid-cols-3 ">
-                        {newsData.map((news) => (
+                        {newsData&&newsData.map((news) => (
                           <NewsCard
                           key={news.id}
                           id={news.id}
