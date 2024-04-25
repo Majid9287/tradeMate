@@ -125,7 +125,7 @@ const SignInThree = () => {
                     {' '}
                     Password{' '}
                   </label>
-                  <a href="/forget" title="" className="text-sm font-semibold hover:underline">
+                  <a href="/forgot" title="" className="text-sm font-semibold hover:underline">
                     {' '}
                     Forgot password?{' '}
                   </a>
