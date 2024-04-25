@@ -182,7 +182,7 @@ const NavbarFour = () => {
     <div className={`relative text-white w-full ${styles.customcolor}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-2 py-2 sm:px-6 lg:px-2">
         <div className="inline-flex items-center space-x-2">
-          <span className={`font-bold ${styles.gradi}`}>TRADING</span>
+          <span className={`font-bold ${styles.gradi}`}>TradeMate</span>
         </div>
         <div className="hidden lg:block ml-12">
           <ul className="ml-12 inline-flex space-x-8 ">
@@ -401,7 +401,7 @@ const NavbarFour = () => {
                   <div className="flex items-center justify-between pb-8">
                     <div className="inline-flex items-center space-x-2">
                       <span className={`font-bold ${styles.gradi}`}>
-                        TRADING
+                        TradeMate
                       </span>
                     </div>
                     <div className="-mr-2">
