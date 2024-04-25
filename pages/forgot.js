@@ -121,7 +121,7 @@ function Forgot() {
 
   return (
     <div>
-      <div className="h-screen relative flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="h-screen bg-gray-100 relative flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <ToastContainer
           position="top-right"
           autoClose={1000}
