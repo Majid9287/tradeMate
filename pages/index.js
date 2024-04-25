@@ -213,14 +213,14 @@ export default function Home() {
   return (
     <>
       <NextSeo
-        title="trading"
-        description="trading.com!"
+        title="TradeMate"
+        description="TradeMate.com!"
         viewport="width=device-width, initial-scale=1"
-        canonical="https://trading.com"
+        canonical="https://TradeMate.com"
         openGraph={{
-          url: "https://trading.com",
-          title: "trading",
-          description: "trading",
+          url: "https://TradeMate.com",
+          title: "TradeMate",
+          description: "TradeMate",
         }}
       />
       <main className={` text-white top-0  ${styles.customcolor}`}>
