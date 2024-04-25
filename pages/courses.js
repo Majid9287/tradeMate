@@ -20,7 +20,7 @@ export default function course() {
         position: "top-right",
         autoClose: 2000,
       });
-      router.push("/login");
+      router.push("/signin");
       return;
     }
     if (courseId && session.user.id) {
