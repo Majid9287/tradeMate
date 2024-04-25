@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import styles from "@/styles/Color.module.css";
 function Forgot() {
   const [email, setEmail] = useState("");
   const [emailError, setemailError] = useState("");
@@ -121,7 +123,7 @@ function Forgot() {
 
   return (
     <div>
-      <div className="h-screen bg-gray-100 relative flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className={`h-screen text-white relative flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${styles.customcolor}`}>
       <ToastContainer
           position="top-right"
           autoClose={1000}
@@ -136,7 +138,7 @@ function Forgot() {
         />
         <div className="w-full max-w-md space-y-8">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight ">
               Forgot your password?
             </h2>
             <div className="text-grey-dark text-center mb-4">
@@ -162,7 +164,7 @@ function Forgot() {
 
                 <input
                   type="text"
-                  className="relative block border border-grey-light w-full p-3 rounded mb-4"
+                  className="relative block border text-black border-grey-light w-full p-3 rounded mb-4"
                   name="email"
                   required
                   placeholder="Email"

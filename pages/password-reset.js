@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import Link from 'next/link';
 import { useEffect } from 'react';
+import styles from "@/styles/Color.module.css";
 function PasswordReset() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -108,7 +109,7 @@ function PasswordReset() {
 
   return (
     <div>
-      <section className="relative h-screen bg-gray-50 dark:bg-gray-900 ">
+      <section className={`relative h-screen text-white ${styles.customcolor}`}>
       <ToastContainer
           position="top-right"
           autoClose={1000}
@@ -122,7 +123,7 @@ function PasswordReset() {
           theme="light"
         />
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight ">
               Reset password?
             </h2>
           <div className="text-grey-dark text-center mb-4">
