@@ -65,7 +65,11 @@ export default function course() {
         `/api/enroll/get?user_id=${session.user.id}`
       );
       const Data = await Response.json();
-      setEnroll(Data);
+      if (Array.isArray(Data)) {
+        setEnroll(Data);
+      } else {
+        setEnroll([]);
+      }
       console.log(Data);
     } catch (error) {
       console.error("Error fetchingdata:", error.message);
@@ -186,7 +190,7 @@ export default function course() {
                         {course.description}
                       </p>
                       <div className="flex relative justify-between">
-                        {Enroll.find(
+                        {Enroll?.find(
                           (enrollment) => enrollment.course_id === course._id
                         ) ? (
                           // User is already enrolled in this course

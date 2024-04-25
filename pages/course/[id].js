@@ -27,7 +27,7 @@ function ProductForm() {
   console.log("url", videoUrl);
   const [marks, setMarks] = useState(25);
   const [marksRange, setMarksRange] = useState(30);
-
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
   // Function to handle file upload
   const handleFileUpload = (e) => {
     setFile(e.target.files[0]); // Set the selected file to the state
@@ -141,6 +141,7 @@ function ProductForm() {
     const selectedChapterData = course.chapters.find(
       (chapter) => chapter._id == selectedChapter
     );
+    setSubmitButtonDisabled(true);
     try {
       const formData = new FormData();
       formData.append("chapter_id", selectedChapter); // Assuming you have the selected chapter ID available
@@ -181,6 +182,9 @@ function ProductForm() {
         position: "top-right",
         autoClose: 2000,
       });
+    } finally {
+      // Enable the submit button after the submission process is complete
+      setSubmitButtonDisabled(false);
     }
   };
   const fetchData = async () => {
@@ -260,52 +264,53 @@ function ProductForm() {
                       enroll.assignments &&
                       enroll.assignments.some(
                         (assignment) =>
-                          assignment.assignment_name ===course.chapters.find(
+                          assignment.assignment_name ===
+                          course.chapters.find(
                             (chapter) => chapter._id === selectedChapter
                           )?.assignments[0]?.title
                       ) ? (
                         <>
-                         {enroll &&
-  enroll.assignments &&
-  enroll.assignments.length > 0 && (
-    <div className="mt-4">
-      {enroll.assignments.map((assignment, index) => (
-        <div key={index}>
-          {assignment.assignment_name ===
-          course.chapters.find(
-            (chapter) => chapter._id === selectedChapter
-          )?.assignments[0]?.title ? (
-            <>
-              {assignment.marks !== null ? ( // Check if marks is not null
-                <>
-                  <div className="flex">
-                    <h1> Obtained Marks: </h1>
-                    {assignment.marks}%
-                  </div>
-                  <input
-                    type="range"
-                    className="text-green-500"
-                    min="0"
-                    max="100"
-                    value={assignment.marks}
-                  />
-                </>
-              ):( <>
-                <h1 className="text-lg text-green-500 font-bold">
-                  Your assignment has been submitted
-                </h1>
-              </>)}
-            </>
-          ) : (
-            <>
-              
-            </>
-          )}
-        </div>
-      ))}
-    </div>
-  )}
-
+                          {enroll &&
+                            enroll.assignments &&
+                            enroll.assignments.length > 0 && (
+                              <div className="mt-4">
+                                {enroll.assignments.map((assignment, index) => (
+                                  <div key={index}>
+                                    {assignment.assignment_name ===
+                                    course.chapters.find(
+                                      (chapter) =>
+                                        chapter._id === selectedChapter
+                                    )?.assignments[0]?.title ? (
+                                      <>
+                                        {assignment.marks !== null ? ( // Check if marks is not null
+                                          <>
+                                            <div className="flex">
+                                              <h1> Obtained Marks: </h1>
+                                              {assignment.marks}%
+                                            </div>
+                                            <input
+                                              type="range"
+                                              className="text-green-500"
+                                              min="0"
+                                              max="100"
+                                              value={assignment.marks}
+                                            />
+                                          </>
+                                        ) : (
+                                          <>
+                                            <h1 className="text-lg text-green-500 font-bold">
+                                              Your assignment has been submitted
+                                            </h1>
+                                          </>
+                                        )}
+                                      </>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                         </>
                       ) : (
                         <>
@@ -323,9 +328,16 @@ function ProductForm() {
                                 {/* Button to submit the file */}
                                 <button
                                   onClick={handleSubmitFile}
+                                  disabled={submitButtonDisabled} // Disable the button when submitButtonDisabled is true
                                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 >
-                                  Submit
+                                  {submitButtonDisabled ? ( // Display loading spinner if submitButtonDisabled is true
+                                    <div className="flex items-center justify-center">
+                                      <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue-500"></div>
+                                    </div>
+                                  ) : (
+                                    "Submit"
+                                  )}
                                 </button>
                               </div>
                             </div>
