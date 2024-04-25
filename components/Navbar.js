@@ -53,7 +53,7 @@ const NavbarFour = () => {
       name: "News",
       href: "/news",
     },
-   
+
     {
       name: "Contact",
       href: "/contact",
@@ -93,7 +93,7 @@ const NavbarFour = () => {
         // Handle errors, show a message, etc.
       }
     };
-  
+
     if (searchIconClicked && searchQuery.trim() !== "") {
       // Call the API to fetch search results
       fetchSearchResults();
@@ -102,7 +102,6 @@ const NavbarFour = () => {
       setSearchResults([]);
     }
   }, [searchQuery, searchIconClicked]);
-  
 
   const handleSearchInput = (e) => {
     setSearchQuery(e.target.value);
@@ -235,26 +234,25 @@ const NavbarFour = () => {
               className=" hover:text-gray-200"
               onClick={handleSearchIconClick}
             >
-                <input
-            className="flex h-10 w-[250px] text-black rounded-md bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-            type="text"
-            placeholder="Serach"
-             value={searchQuery}
-                    onChange={handleSearchInput}
-          ></input>
+              <input
+                className="flex h-10 w-[250px] text-black rounded-md bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                type="text"
+                placeholder="Serach"
+                value={searchQuery}
+                onChange={handleSearchInput}
+              ></input>
             </span>
             {searchQuery && (
-              <div  className={`absolute px-2 pb-8 right-0 border lg:right-4 mt-2 py-2 w-full lg:w-1/2  rounded-md shadow-lg z-50 ${styles.customcolor}`}>
-               
-
+              <div
+                className={`absolute px-2 pb-8 right-0 border lg:right-4 mt-2 py-2 w-full lg:w-1/2  rounded-md shadow-lg z-50 ${styles.customcolor}`}
+              >
                 {/* Search results */}
-                {searchResults.length  > 0 ? (
+                {searchResults.length > 0 ? (
                   <div
                     style={{
                       // Set a fixed height for the dropdown
                       overflowY: "auto", // Enable scrolling if items are greater than three
                     }}
-                   
                   >
                     <div className="grid grid-cols-1">
                       {searchResults.map((post) => (
@@ -282,10 +280,9 @@ const NavbarFour = () => {
                       </div>
                     )}
                   </div>
-                ) : (<>{searchQuery&&
-                  <p>No results found.</p>}
-          
-                  </>)}
+                ) : (
+                  <>{searchQuery && <p>No results found.</p>}</>
+                )}
 
                 {/* View all products */}
               </div>
@@ -367,6 +364,7 @@ const NavbarFour = () => {
             </span>
           )}
         </div>
+
         <div className="ml-2 lg:hidden">
           <TiThMenu
             onClick={toggleMenu}
@@ -441,6 +439,63 @@ const NavbarFour = () => {
                         )}
                     </div>
                   ))}
+                  {isLoggedIn ? (
+                     
+                        
+                          <ul className="py-2">
+                            <>
+                              <Link href="/profile">
+                                <li
+                                  className={`flex items-center rounded-md p-3 text-lg font-semibold  ${styles.custom1}`}
+                                >
+                                  Profile
+                                </li>
+                              </Link>
+                              {isAdmin && (
+                                <Link href="/adminDashboard">
+                                  <li
+                                    className={`flex items-center rounded-md p-3 text-lg font-semibold  ${styles.custom1}`}
+                                  >
+                                    Admin Dashboard
+                                  </li>
+                                </Link>
+                              )}
+                              <div onClick={handleLogout}>
+                                <li
+                                   className={`w-full rounded-md px-3 py-2  text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
+                                   >
+                                  Logout
+                                </li>
+                              </div>
+                            </>
+                          </ul>
+                        
+                      
+                    
+                  ) : (
+                    <>
+                    <hr className="w-full my-2"></hr>
+                    <span className="flex justify-between mt-4">
+                      <Link href="/signin" className="mx-2">
+                        {" "}
+                        <button
+                          type="button"
+                          className={`w-full rounded-md px-3 py-2  text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
+                        >
+                          Login
+                        </button>
+                      </Link>
+                      <Link href="/signup">
+                        {" "}
+                        <button
+                          type="button"
+                          className={`w-full rounded-md px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
+                        >
+                          Register
+                        </button>
+                      </Link>
+                    </span></>
+                  )}
                 </div>
               </div>
             </div>
