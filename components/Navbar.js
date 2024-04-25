@@ -24,19 +24,20 @@ const NavbarFour = () => {
       href: "/",
     },
     {
-      name: "Introduction",
+      name: "Start Leraning",
       href: "#",
-      sublinks: [],
-    },
-    {
-      name: "Courses",
-      href: "/courses",
-      sublinks: [],
+      sublinks: [{ name: "Courses",
+      href: "/courses",},
+    ],
     },
     {
       name: "Market",
       href: "#",
       sublinks: [
+        {
+          name: "Risk Calculator",
+          href: "/calculator",
+        },
         { name: "Market Overview Widget", href: "/market/market-overview" },
         { name: "Economic Calendar Widget", href: "/market/economic-calendar" },
         { name: "Ticker Widget", href: "/market/ticker" },
@@ -116,6 +117,8 @@ const NavbarFour = () => {
   const handelAccountDropdown = () => {
     setAccountDropdown(!AccountDropdown);
   };
+  const [introductionSublinksFetched, setIntroductionSublinksFetched] = useState(false);
+
   useEffect(() => {
     // Fetch sublinks for the "Introduction" section from your API
     const fetchIntroductionSublinks = async () => {
@@ -123,27 +126,39 @@ const NavbarFour = () => {
         // Replace 'YOUR_INTRODUCTION_API_ENDPOINT' with the actual API endpoint
         const response = await fetch("/api/introduction/get-name");
         const data = await response.json();
-
-        // Update the sublinks for the "Introduction" section
-        setMenuItems((prevMenuItems) => {
-          const updatedMenuItems = [...prevMenuItems];
-          const introductionIndex = updatedMenuItems.findIndex(
-            (item) => item.name === "Introduction"
-          );
-
-          if (introductionIndex !== -1) {
-            updatedMenuItems[introductionIndex].sublinks = data;
-          }
-
-          return updatedMenuItems;
-        });
+  
+        // Update the sublinks for the "Introduction" section only if they haven't been fetched yet
+        if (!introductionSublinksFetched) {
+          setMenuItems((prevMenuItems) => {
+            const updatedMenuItems = [...prevMenuItems];
+            const introductionIndex = updatedMenuItems.findIndex(
+              (item) => item.name === "Start Leraning"
+            );
+  
+            if (introductionIndex !== -1) {
+              // Merge the existing sublinks with the new data, avoiding duplicates
+              const existingSublinks = updatedMenuItems[introductionIndex].sublinks || [];
+              const newData = data.filter(newSublink => !existingSublinks.some(existingSublink => existingSublink.name === newSublink.name));
+              updatedMenuItems[introductionIndex].sublinks = [
+                ...(existingSublinks),
+                ...newData,
+              ];
+            }
+  
+            return updatedMenuItems;
+          });
+  
+          // Set the flag to indicate that sublinks have been fetched
+          setIntroductionSublinksFetched(true);
+        }
       } catch (error) {
         console.error("Error fetching Introduction sublinks:", error);
       }
     };
-
+  
     fetchIntroductionSublinks();
-  }, []);
+  }, [introductionSublinksFetched]);
+  
 
   useEffect(() => {
     // Close the menu when the route changes
@@ -237,7 +252,7 @@ const NavbarFour = () => {
               <input
                 className="flex h-10 w-[250px] text-black rounded-md bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                 type="text"
-                placeholder="Serach"
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchInput}
               ></input>
@@ -440,61 +455,57 @@ const NavbarFour = () => {
                     </div>
                   ))}
                   {isLoggedIn ? (
-                     
-                        
-                          <ul className="py-2">
-                            <>
-                              <Link href="/profile">
-                                <li
-                                  className={`flex items-center rounded-md p-3 text-lg font-semibold  ${styles.custom1}`}
-                                >
-                                  Profile
-                                </li>
-                              </Link>
-                              {isAdmin && (
-                                <Link href="/adminDashboard">
-                                  <li
-                                    className={`flex items-center rounded-md p-3 text-lg font-semibold  ${styles.custom1}`}
-                                  >
-                                    Admin Dashboard
-                                  </li>
-                                </Link>
-                              )}
-                              <div onClick={handleLogout}>
-                                <li
-                                   className={`w-full rounded-md px-3 py-2  text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
-                                   >
-                                  Logout
-                                </li>
-                              </div>
-                            </>
-                          </ul>
-                        
-                      
-                    
+                    <ul className="py-2">
+                      <>
+                        <Link href="/profile">
+                          <li
+                            className={`flex items-center rounded-md p-3 text-lg font-semibold  ${styles.custom1}`}
+                          >
+                            Profile
+                          </li>
+                        </Link>
+                        {isAdmin && (
+                          <Link href="/adminDashboard">
+                            <li
+                              className={`flex items-center rounded-md p-3 text-lg font-semibold  ${styles.custom1}`}
+                            >
+                              Admin Dashboard
+                            </li>
+                          </Link>
+                        )}
+                        <div onClick={handleLogout}>
+                          <li
+                            className={`w-full rounded-md px-3 py-2  text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
+                          >
+                            Logout
+                          </li>
+                        </div>
+                      </>
+                    </ul>
                   ) : (
                     <>
-                    <hr className="w-full my-2"></hr>
-                    <span className="flex justify-between mt-4">
-                      <Link href="/signin" className="mx-2">
-                        {" "}
-                        <button
-                          type="button"
-                          className={`w-full rounded-md px-3 py-2  text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
-                        >
-                          Login
-                        </button>
-                      </Link>
-                      <Link href="/signup">
-                        {" "}
-                        <button
-                          type="button"
-                          className={`w-full rounded-md px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
-                        >
-                          Register
-                        </button>
-                      </Link>
-                    </span></>
+                      <hr className="w-full my-2"></hr>
+                      <span className="flex justify-between mt-4">
+                        <Link href="/signin" className="mx-2">
+                          {" "}
+                          <button
+                            type="button"
+                            className={`w-full rounded-md px-3 py-2  text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
+                          >
+                            Login
+                          </button>
+                        </Link>
+                        <Link href="/signup">
+                          {" "}
+                          <button
+                            type="button"
+                            className={`w-full rounded-md px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
+                          >
+                            Register
+                          </button>
+                        </Link>
+                      </span>
+                    </>
                   )}
                 </div>
               </div>
