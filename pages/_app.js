@@ -15,6 +15,8 @@ export default function App({ Component, pageProps }) {
   // Define a list of routes that should not display Navbar and Footer (your admin pages).
   const adminRoutes = [
     "/adminDashboard/message/list",
+    "/adminDashboard/enrolled/list",
+    "/adminDashboard/enrolled/assignment-list/[id]",
     "/adminDashboard/user/list",
     "/adminDashboard/user/[email]",
     "/adminDashboard/user/update/[email]",

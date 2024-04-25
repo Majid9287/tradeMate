@@ -29,7 +29,7 @@ function UserProfile({ token }) {
   useEffect(() => {
     const checkAdminStatus = async () => {
       const session = await getSession();
-
+console.log(session)
       if (session && session.user.email) {
         setEmail(session.user.email);
         // Call fetchCourseDetails only after setting the email

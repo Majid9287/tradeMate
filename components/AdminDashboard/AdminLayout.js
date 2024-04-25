@@ -10,6 +10,7 @@ import { TiThMenu } from "react-icons/ti";
 import { IoMdArrowDropdown, IoMdArrowDropright } from "react-icons/io";
 import { FaReadme } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
+import { FaDiscourse } from "react-icons/fa";
 
 const AdminLayout = ({ children }) => {
   const router = useRouter();
@@ -346,7 +347,21 @@ const AdminLayout = ({ children }) => {
               </div>
             </li>
           </Link>
-
+          <Link href="/adminDashboard/enrolled/list">
+            <li className={`px-4 py-1`}>
+              <div
+                className={`flex items-center justify-between p-2 rounded-md hover:bg-amber-400 ${
+                  router.pathname === "" ? "bg-amber-500" : ""
+                }`}
+              >
+                
+                <div className="flex">
+                  <FaDiscourse className="mr-2 mt-1" />{" "}
+                  <h1 className="font-bold">EnrolledCourse</h1>
+                </div>
+              </div>
+            </li>
+          </Link>
           <Link href="/adminDashboard/user/users" className="hidden">
             <li
               className={`p-4 hover:bg-amber-400 ${

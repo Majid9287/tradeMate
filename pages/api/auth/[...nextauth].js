@@ -110,8 +110,7 @@ export default connectDb(
       },
      
       async jwt({ token, user, account, profile, isNewUser }) {
-        console.log("u in jwt",user);
-        console.log("t in jwt",token);
+      
         if(user){
           token._id=user._id;
           token.role=user.role;
@@ -120,11 +119,10 @@ export default connectDb(
         return token
       },
       async session({  session, user, token}) {
-        console.log("t in s",token);
-        console.log("S",session);
+        
         session.user = {
           ...session.user,
-          id: token.id, // Assuming token.id is the user id
+          id: token._id, // Assuming token.id is the user id
           role: token.role,
           permissions: token.permissions,
         };

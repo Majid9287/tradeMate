@@ -18,7 +18,6 @@ import store from "../redux/store";
 const NavbarFour = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const isAdmin = useSelector((state) => state.user.isAdmin);
-  console.log("nav", isLoggedIn, isAdmin);
   const staticMenuItems = [
     {
       name: "Home",
