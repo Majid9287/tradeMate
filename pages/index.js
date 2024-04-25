@@ -153,7 +153,22 @@ export default function Home() {
   const finnhubClient = new finnhub.DefaultApi();
 
   const [newsData, setNewsData] = useState([]);
-
+  const fetchnews = async () => {
+    try {
+      finnhubClient.marketNews(`crypto`, {}, (error, data, response) => {
+        console.log(data);
+        setNewsData((prevNewsData) => {
+          // Create a Set from the concatenated arrays to remove duplicates
+          const uniqueNewsData = new Set([...prevNewsData, ...data]);
+          // Convert the Set back to an array
+          return Array.from(uniqueNewsData);
+        });
+      });
+    } catch (error) {
+      console.error("Error fetching news data:", error.message);
+      toast.error("Error fetching news data");
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -167,6 +182,7 @@ export default function Home() {
       }
     };
     fetchData();
+    fetchnews();
   }, []);
 
   useEffect(() => {
