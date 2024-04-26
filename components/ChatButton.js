@@ -19,7 +19,9 @@ const FloatingWhatsAppButton = () => {
       console.log(data,chatId)
       setIsLoading(false);
       // Navigate to chat page with chat ID
-      router.push(`/chat/${chatId}`);}
+      router.push(`/chat/${chatId}`);}else{
+        router.push("/signin");
+      }
     } catch (error) {
       console.error("Error fetching chat ID:", error);
       setIsLoading(false);
