@@ -13,6 +13,10 @@ const UserSchema = new mongoose.Schema({
     value: { type: String },
     expiresAt: { type: Date },
   },
+  chats: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chat" }],
+    default: [],
+  }
 }, { timestamps: true });
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

@@ -2,13 +2,14 @@ import "@/styles/globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
+import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import { setUserLoggedIn } from "../redux/userSlice";
 import { setAdminStatus } from "../redux/userSlice";
+import { getSession, SessionProvider } from "next-auth/react";
 
+import FloatingButton from "../components/ChatButton";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
@@ -36,7 +37,7 @@ export default function App({ Component, pageProps }) {
     "/adminDashboard/course/update/[courseId]/[chapterId]",
     "/adminDashboard/course/update-course/[courseId]",
   ]; // Add the routes for your admin pages here.
-
+  const isOnchat=[ "/chat/[chatId]",]
   // Check if the current route is in the list of adminRoutes.
   const isOnAdminPage = adminRoutes.includes(router.pathname);
   useEffect(() => {
@@ -52,14 +53,14 @@ export default function App({ Component, pageProps }) {
 
     checkAdminStatus();
   }, [router]);
+
   return (
-    <>
-      {/* Only render Navbar and Footer if it's not an admin page */}
-      <Provider store={store}>
-        {!isOnAdminPage && <Navbar />}
+    <SessionProvider session={pageProps.session}>
+     <Provider store={store}> {!isOnAdminPage && <Navbar />}
+      
         <Component {...pageProps} />
-        {!isOnAdminPage && <Footer />}{" "}
-      </Provider>
-    </>
+        <FloatingButton/>
+      {!isOnAdminPage &&!isOnchat &&<Footer />}</Provider>
+    </SessionProvider>
   );
 }
