@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }) {
      <Provider store={store}> {!isOnAdminPage && <Navbar />}
       
         <Component {...pageProps} />
-        <FloatingButton/>
+        {!isOnchat &&  <FloatingButton/>}
       {!isOnAdminPage &&!isOnchat &&<Footer />}</Provider>
     </SessionProvider>
   );
