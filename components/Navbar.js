@@ -45,7 +45,10 @@ const NavbarFour = () => {
         { name: "Forex Cross Rates Widget", href: "/market/forex-cross-rates" },
       ],
     },
-
+    {
+      name: "community",
+      href: "/chat",
+    },
     {
       name: "Blog",
       href: "/blog",

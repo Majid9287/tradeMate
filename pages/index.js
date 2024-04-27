@@ -158,6 +158,8 @@ export default function Home() {
       finnhubClient.marketNews(`crypto`, {}, (error, data, response) => {
         console.log(data);
         setNewsData((prevNewsData) => {
+          // Initialize prevNewsData as an empty array if it's undefined
+          prevNewsData = prevNewsData || [];
           // Create a Set from the concatenated arrays to remove duplicates
           const uniqueNewsData = new Set([...prevNewsData, ...data]);
           // Convert the Set back to an array
@@ -169,6 +171,7 @@ export default function Home() {
       toast.error("Error fetching news data");
     }
   };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {

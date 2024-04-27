@@ -62,9 +62,7 @@ const MessageBox = ({ message, currentUser }) => {
                 isCurrentUserMessage ? "bg-purple-2 text-white" : "bg-white"
               } p-3 rounded-lg text-base-medium`}
             >
-              {!isCurrentUserMessage && (
-                <span className="text-small-bold">{message?.sender?.name}: </span>
-              )}
+              
               {message?.text}
             </p>
           )}

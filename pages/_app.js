@@ -5,15 +5,13 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
 import store from "../redux/store";
-import { setUserLoggedIn } from "../redux/userSlice";
-import { setAdminStatus } from "../redux/userSlice";
+import { setUserLoggedIn, setAdminStatus, setChatId } from "../redux/userSlice";
 import { getSession, SessionProvider } from "next-auth/react";
-
 import FloatingButton from "../components/ChatButton";
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
-  // Define a list of routes that should not display Navbar and Footer (your admin pages).
   const adminRoutes = [
     "/adminDashboard/message/list",
     "/adminDashboard/enrolled/list",
@@ -36,32 +34,56 @@ export default function App({ Component, pageProps }) {
     "/adminDashboard/course/chapters/[id]",
     "/adminDashboard/course/update/[courseId]/[chapterId]",
     "/adminDashboard/course/update-course/[courseId]",
-  ]; // Add the routes for your admin pages here.
-  const isOnchat=[ "/chat/[chatId]",];
-  // Check if the current route is in the list of adminRoutes.
-  const isOnAdminPage = adminRoutes.includes(router.pathname);
-  const isOnChatPage = isOnchat.includes(router.pathname)
+  ];
+  const chatRoutes = ["/chat"];
+  const handleFetchChatId = async () => {
+    try {
+      const session = await getSession();
+      if (!session) {
+        router.push("/signin");
+        return;
+      }
+      const response = await fetch(`/api/chats/create?currentUserId=${session.user.id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch chat ID");
+      }
+      const data = await response.json();
+      const  chatId= data._id;
+      console.log(chatId);
+      store.dispatch(setChatId(chatId));
+    } catch (error) {
+      console.error("Error fetching chat ID:", error);
+    }
+  };  
   useEffect(() => {
-    const checkAdminStatus = async () => {
+    const checkUserStatus = async () => {
       const session = await getSession();
       if (session && session.user.name) {
         store.dispatch(setUserLoggedIn(true));
+        handleFetchChatId();
       }
       if (session && session.user.role === "admin") {
         store.dispatch(setAdminStatus(true));
       }
     };
 
-    checkAdminStatus();
+    checkUserStatus();
   }, [router]);
+  useEffect(() => {
+ 
+  handleFetchChatId() ;
+}, [router]);
+
+  const isOnAdminPage = adminRoutes.includes(router.pathname);
+  const isOnChatPage = chatRoutes.includes(router.pathname);
 
   return (
     <SessionProvider session={pageProps.session}>
-     <Provider store={store}> {!isOnAdminPage && <Navbar />}
-      
+      <Provider store={store}>
+        {!isOnAdminPage && <Navbar />}
         <Component {...pageProps} />
-        {! isOnChatPage &&  <FloatingButton/>}
-      {!isOnAdminPage &&! isOnChatPage &&<Footer />}</Provider>
+        {!isOnAdminPage && !isOnChatPage && <Footer />}
+      </Provider>
     </SessionProvider>
   );
 }
