@@ -37,9 +37,10 @@ export default function App({ Component, pageProps }) {
     "/adminDashboard/course/update/[courseId]/[chapterId]",
     "/adminDashboard/course/update-course/[courseId]",
   ]; // Add the routes for your admin pages here.
-  const isOnchat=[ "/chat/[chatId]",]
+  const isOnchat=[ "/chat/[chatId]",];
   // Check if the current route is in the list of adminRoutes.
   const isOnAdminPage = adminRoutes.includes(router.pathname);
+  const isOnChatPage = isOnchat.includes(router.pathname)
   useEffect(() => {
     const checkAdminStatus = async () => {
       const session = await getSession();
@@ -59,8 +60,8 @@ export default function App({ Component, pageProps }) {
      <Provider store={store}> {!isOnAdminPage && <Navbar />}
       
         <Component {...pageProps} />
-        {!isOnchat &&  <FloatingButton/>}
-      {!isOnAdminPage &&!isOnchat &&<Footer />}</Provider>
+        {! isOnChatPage &&  <FloatingButton/>}
+      {!isOnAdminPage &&! isOnChatPage &&<Footer />}</Provider>
     </SessionProvider>
   );
 }
