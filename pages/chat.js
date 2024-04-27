@@ -35,7 +35,7 @@ const ChatPage = () => {
   useEffect(() => {
     // Navigate back if chatId is null
     if (!chatId) {
-      router.push("/"); // Adjust the path to navigate back to
+        router.push("/signin"); // Adjust the path to navigate back to
     }
   }, [chatId]);
 

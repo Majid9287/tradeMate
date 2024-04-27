@@ -69,10 +69,7 @@ export default function App({ Component, pageProps }) {
 
     checkUserStatus();
   }, [router]);
-  useEffect(() => {
- 
-  handleFetchChatId() ;
-}, [router]);
+
 
   const isOnAdminPage = adminRoutes.includes(router.pathname);
   const isOnChatPage = chatRoutes.includes(router.pathname);
