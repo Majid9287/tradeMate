@@ -44,7 +44,7 @@ const MessageBox = ({ message, currentUser }) => {
       <div className="flex gap-3 items-start">
         {!isCurrentUserMessage && (
           <img
-            src={message?.sender?.profilePhoto || "/assets/person.jpg"}
+            src={message?.sender?.photoUrl|| "/assets/person.jpg"}
             alt="profile photo"
             className="w-8 h-8 rounded-full"
           />
@@ -52,19 +52,23 @@ const MessageBox = ({ message, currentUser }) => {
         <div className="flex flex-col gap-2">
           {!isCurrentUserMessage && (
             <p className="text-small-bold">
-              {message?.sender?.username} &#160; &#183; &#160;{" "}
+              {message?.sender?.name} &#160; &#183; &#160;{" "}
               {format(new Date(message?.createdAt), "hh:mm a")}
             </p>
           )}
-          {message?.text ? (
+          {message?.text && (
             <p
               className={`w-fit ${
                 isCurrentUserMessage ? "bg-purple-2 text-white" : "bg-white"
               } p-3 rounded-lg text-base-medium`}
             >
+              {!isCurrentUserMessage && (
+                <span className="text-small-bold">{message?.sender?.name}: </span>
+              )}
               {message?.text}
             </p>
-          ) : (
+          )}
+          {message?.photo && (
             <div className="relative">
               <img
                 src={message?.photo}
@@ -110,7 +114,7 @@ const MessageBox = ({ message, currentUser }) => {
         </div>
         {isCurrentUserMessage && (
           <img
-            src={message?.sender?.profilePhoto || "/assets/person.jpg"}
+            src={message?.sender?.photoUrl|| "/assets/person.jpg"}
             alt="profile photo"
             className="w-8 h-8 rounded-full"
           />
