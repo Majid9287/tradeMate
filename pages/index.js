@@ -244,8 +244,7 @@ export default function Home() {
                         </h1>
                         <div className="mt-4 space-x-4  ">
                           <Link
-                            href={`/introduction/[slug]`}
-                            as={`/introduction/Forex Market`}
+                            href={`/courses`}
                           >
                             <button className="my-1 bg-blue-500 text-white font-bold rounded-full py-2 px-4 hover:bg-blue-700  focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
                               start learning now
@@ -266,8 +265,7 @@ export default function Home() {
                         </h1>
                         <div className="mt-4 space-x-4">
                           <Link
-                            href={`/introduction/[slug]`}
-                            as={`/introduction/Crypto Market`}
+                            href={`/courses`}
                           >
                             <button className="my-1 bg-blue-500 text-white font-bold rounded-full py-2 px-4 hover:bg-blue-700  focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
                               start learning now
@@ -288,8 +286,7 @@ export default function Home() {
                         </h1>
                         <div className="mt-4 space-x-4">
                           <Link
-                            href={`/introduction/[slug]`}
-                            as={`/introduction/Stock Market`}
+                            href={`/courses`}
                           >
                             <button className="my-1 bg-blue-500 text-white font-bold rounded-full py-2 px-4 hover:bg-blue-700  focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
                               start learning now
