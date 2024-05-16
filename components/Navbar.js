@@ -397,15 +397,7 @@ const NavbarFour = () => {
                   Login
                 </button>
               </Link>
-              <Link href="/signup">
-                {" "}
-                <button
-                  type="button"
-                  className={`w-full rounded-md px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${styles.buttoncol}`}
-                >
-                  Register
-                </button>
-              </Link>
+             
             </span>
           )}
         </div>
