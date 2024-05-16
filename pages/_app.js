@@ -81,8 +81,9 @@ export default function App({ Component, pageProps }) {
       <SessionProvider session={pageProps.session}>
         <Provider store={store}>
        
-          {!isOnAdminPage && <Navbar />} <Chatbot/>
+          {!isOnAdminPage && <Navbar />} 
           <Component {...pageProps} />
+          { !isOnChatPage && <Chatbot/>}
           {!isOnAdminPage && !isOnChatPage && <Footer />}
         </Provider>
       </SessionProvider>

@@ -88,7 +88,7 @@ const Chatbot = () => {
   return (
     <>
       <div
-     
+     className="bg-gray-400"
         style={{
           position: "fixed",
           bottom: "20px",
@@ -99,7 +99,7 @@ const Chatbot = () => {
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
         }}
       >
-        <Button  className="border border-white text-3xl"  colorScheme="teal" size="md" onClick={onOpen}>
+        <Button  className="border border-white text-3xl md:text-1xl"  colorScheme="teal" size="md" onClick={onOpen}>
         <SiChatbot />
         </Button>
         <Drawer

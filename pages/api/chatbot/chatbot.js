@@ -56,7 +56,7 @@ console.log(text)
     };
 
     try {
-      const response = await fetch(LANGUAGE_MODEL_URL, {
+      const response = await fetch(process.env.LANGUAGE_MODEL_URL, {
         headers: {
           "Content-Type": "application/json",
         },

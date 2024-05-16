@@ -191,9 +191,10 @@ const NavbarFour = () => {
 
   useEffect(() => {
     // Close the menu when the route changes, unless the path is '#'
-    if (router.asPath !== "#") {
+    if (router.asPath !== "/#") {
       setIsMenuOpen(false);
     }
+    setShowDropdownForSearch(false);
   }, [router.asPath]);
 
   const toggleMenu = () => {
