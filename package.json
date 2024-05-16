@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
@@ -25,6 +26,7 @@
     "express": "^4.18.2",
     "finnhub": "^1.2.18",
     "formidable": "^2.1.1",
+    "framer-motion": "^11.2.3",
     "handlebars": "^4.7.7",
     "html-react-parser": "^3.0.16",
     "install": "^0.13.0",

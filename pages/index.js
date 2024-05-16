@@ -157,6 +157,7 @@ export default function Home() {
     try {
       finnhubClient.marketNews(`crypto`, {}, (error, data, response) => {
         console.log(data);
+        if(data){
         setNewsData((prevNewsData) => {
           // Initialize prevNewsData as an empty array if it's undefined
           prevNewsData = prevNewsData || [];
@@ -164,7 +165,7 @@ export default function Home() {
           const uniqueNewsData = new Set([...prevNewsData, ...data]);
           // Convert the Set back to an array
           return Array.from(uniqueNewsData);
-        });
+        });}
       });
     } catch (error) {
       console.error("Error fetching news data:", error.message);

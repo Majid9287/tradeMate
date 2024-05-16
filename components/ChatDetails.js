@@ -1,6 +1,6 @@
 
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef,useCallback } from "react";
 import Link from "next/link";
 import { CldUploadButton } from "next-cloudinary";
 import MessageBox from "./MessageBox";
@@ -13,12 +13,17 @@ const ChatDetails = ({ chatId }) => {
   const [loading, setLoading] = useState(false);
   const [chat, setChat] = useState({});
   const [otherMembers, setOtherMembers] = useState([]);
-
+  const messageContainerRef = useRef(null);
   const { data: session } = useSession();
   const currentUser = session?.user;
   console.log(chatId)
   const [text, setText] = useState("");
-
+  const scrollToBottom = useCallback(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  }, []);
 
   const getChatDetails = async () => {
     try {
@@ -124,7 +129,8 @@ const ChatDetails = ({ chatId }) => {
     bottomRef.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [chat?.messages]);
+    scrollToBottom();
+  }, [chat?.messages,scrollToBottom]);
 
   return loading ? (
     <></>

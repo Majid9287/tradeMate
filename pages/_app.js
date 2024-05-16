@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Chatbot from "../components/Chatbot";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
@@ -8,7 +9,7 @@ import store from "../redux/store";
 import { setUserLoggedIn, setAdminStatus, setChatId } from "../redux/userSlice";
 import { getSession, SessionProvider } from "next-auth/react";
 import FloatingButton from "../components/ChatButton";
-
+import { ChakraProvider } from "@chakra-ui/react";
 export default function App({ Component, pageProps }) {
   const router = useRouter();
 
@@ -43,18 +44,20 @@ export default function App({ Component, pageProps }) {
         router.push("/signin");
         return;
       }
-      const response = await fetch(`/api/chats/create?currentUserId=${session.user.id}`);
+      const response = await fetch(
+        `/api/chats/create?currentUserId=${session.user.id}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch chat ID");
       }
       const data = await response.json();
-      const  chatId= data._id;
+      const chatId = data._id;
       console.log(chatId);
       store.dispatch(setChatId(chatId));
     } catch (error) {
       console.error("Error fetching chat ID:", error);
     }
-  };  
+  };
   useEffect(() => {
     const checkUserStatus = async () => {
       const session = await getSession();
@@ -70,17 +73,19 @@ export default function App({ Component, pageProps }) {
     checkUserStatus();
   }, [router]);
 
-
   const isOnAdminPage = adminRoutes.includes(router.pathname);
   const isOnChatPage = chatRoutes.includes(router.pathname);
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <Provider store={store}>
-        {!isOnAdminPage && <Navbar />}
-        <Component {...pageProps} />
-        {!isOnAdminPage && !isOnChatPage && <Footer />}
-      </Provider>
-    </SessionProvider>
+    <ChakraProvider>
+      <SessionProvider session={pageProps.session}>
+        <Provider store={store}>
+       
+          {!isOnAdminPage && <Navbar />} <Chatbot/>
+          <Component {...pageProps} />
+          {!isOnAdminPage && !isOnChatPage && <Footer />}
+        </Provider>
+      </SessionProvider>
+    </ChakraProvider>
   );
 }

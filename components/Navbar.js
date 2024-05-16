@@ -24,11 +24,9 @@ const NavbarFour = () => {
       href: "/",
     },
     {
-      name: "Start Leraning",
+      name: "Start Learning",
       href: "#",
-      sublinks: [{ name: "Courses",
-      href: "/courses",},
-    ],
+      sublinks: [{ name: "Courses", href: "/courses" }],
     },
     {
       name: "Market",
@@ -46,7 +44,7 @@ const NavbarFour = () => {
       ],
     },
     {
-      name: "community",
+      name: "Community",
       href: "/chat",
     },
     {
@@ -79,6 +77,8 @@ const NavbarFour = () => {
     setSearchIconClicked(!searchIconClicked);
   };
   useEffect(() => {
+    let timeoutId; // Store the timeout ID
+    setLoading(true);
     const fetchSearchResults = async () => {
       try {
         setLoading(true);
@@ -88,23 +88,33 @@ const NavbarFour = () => {
         }
         const data = await response.json();
         const { blogs } = data;
-        console.log("Search results:", blogs); // Log the search results
+        console.log("Search results:", blogs);
         setSearchResults(blogs);
-        setLoading(false);
       } catch (error) {
-        setLoading(false);
         console.error("Error fetching search results:", error);
-        // Handle errors, show a message, etc.
+      } finally {
+        setLoading(false);
       }
     };
 
     if (searchIconClicked && searchQuery.trim() !== "") {
-      // Call the API to fetch search results
-      fetchSearchResults();
+      // Clear any existing timeout before starting a new one
+      clearTimeout(timeoutId);
+
+      // Set a new timeout to delay the search
+      timeoutId = setTimeout(() => {
+        
+        fetchSearchResults();
+      }, 500); // Adjust delay time (in milliseconds) as needed
     } else {
-      // Reset search results if searchQuery is empty
       setSearchResults([]);
     }
+
+    return () => {
+      // Clean up the timeout if the component unmounts before it's finished
+      clearTimeout(timeoutId);
+    };
+    
   }, [searchQuery, searchIconClicked]);
 
   const handleSearchInput = (e) => {
@@ -120,53 +130,72 @@ const NavbarFour = () => {
   const handelAccountDropdown = () => {
     setAccountDropdown(!AccountDropdown);
   };
-  const [introductionSublinksFetched, setIntroductionSublinksFetched] = useState(false);
+  const [introductionSublinksFetched, setIntroductionSublinksFetched] =
+    useState(false);
 
   useEffect(() => {
-    // Fetch sublinks for the "Introduction" section from your API
     const fetchIntroductionSublinks = async () => {
       try {
-        // Replace 'YOUR_INTRODUCTION_API_ENDPOINT' with the actual API endpoint
         const response = await fetch("/api/introduction/get-name");
         const data = await response.json();
-  
-        // Update the sublinks for the "Introduction" section only if they haven't been fetched yet
-        if (!introductionSublinksFetched) {
+
+        // Check if data is valid and non-empty
+        if (data && data.length > 0) {
           setMenuItems((prevMenuItems) => {
             const updatedMenuItems = [...prevMenuItems];
             const introductionIndex = updatedMenuItems.findIndex(
-              (item) => item.name === "Start Leraning"
+              (item) => item.name === "Start Learning"
             );
-  
+
             if (introductionIndex !== -1) {
-              // Merge the existing sublinks with the new data, avoiding duplicates
-              const existingSublinks = updatedMenuItems[introductionIndex].sublinks || [];
-              const newData = data.filter(newSublink => !existingSublinks.some(existingSublink => existingSublink.name === newSublink.name));
+              // Merge sublinks, avoid duplicates
+              const existingSublinks =
+                updatedMenuItems[introductionIndex].sublinks || [];
+              const newData = data.filter(
+                (newSublink) =>
+                  !existingSublinks.some(
+                    (existingSublink) =>
+                      existingSublink.name === newSublink.name
+                  )
+              );
               updatedMenuItems[introductionIndex].sublinks = [
-                ...(existingSublinks),
+                ...existingSublinks,
                 ...newData,
               ];
             }
-  
+
             return updatedMenuItems;
           });
-  
-          // Set the flag to indicate that sublinks have been fetched
-          setIntroductionSublinksFetched(true);
+        } else {
+          console.warn("Fetched data is empty or invalid.");
         }
+        setIntroductionSublinksFetched(true); // Set fetched flag regardless of data validity
       } catch (error) {
-        console.error("Error fetching Introduction sublinks:", error);
+        // More specific error handling
+        if (error.name === "TypeError") {
+          console.error("Network error fetching Introduction sublinks:", error);
+        } else {
+          console.error(
+            "Unexpected error fetching Introduction sublinks:",
+            error
+          );
+        }
       }
     };
-  
-    fetchIntroductionSublinks();
+
+    // Fetch only if not already fetched
+    if (!introductionSublinksFetched) {
+      fetchIntroductionSublinks();
+    }
   }, [introductionSublinksFetched]);
-  
 
   useEffect(() => {
-    // Close the menu when the route changes
-    setIsMenuOpen(false);
+    // Close the menu when the route changes, unless the path is '#'
+    if (router.asPath !== "#") {
+      setIsMenuOpen(false);
+    }
   }, [router.asPath]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -185,7 +214,10 @@ const NavbarFour = () => {
     <div className={`relative text-white w-full ${styles.customcolor}`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-2 py-2 sm:px-6 lg:px-2">
         <div className="inline-flex items-center space-x-2">
-        <Link href="/">  <span className={`font-bold ${styles.gradi}`}>TradeMate</span></Link>
+          <Link href="/">
+            {" "}
+            <span className={`font-bold p-2 ${styles.gradi}`}>TradeMate</span>
+          </Link>
         </div>
         <div className="hidden lg:block ml-12">
           <ul className="ml-12 inline-flex space-x-8 ">
@@ -249,7 +281,7 @@ const NavbarFour = () => {
         <div className="flex grow justify-end">
           <span className="items-center">
             <span
-              className=" hover:text-gray-200"
+              className="hover:text-gray-200"
               onClick={handleSearchIconClick}
             >
               <input
@@ -258,51 +290,46 @@ const NavbarFour = () => {
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearchInput}
-              ></input>
+              />
             </span>
+
+            {/* Conditional rendering of the search results dropdown */}
             {searchQuery && (
               <div
-                className={`absolute px-2 pb-8 right-0 border lg:right-4 mt-2 py-2 w-full lg:w-1/2  rounded-md shadow-lg z-50 ${styles.customcolor}`}
+                className={`absolute px-2 pb-8 right-0 border lg:right-4 mt-2 py-2 w-full lg:w-1/2 rounded-md shadow-lg z-50 ${styles.customcolor}`}
               >
-                {/* Search results */}
-                {searchResults.length > 0 ? (
-                  <div
-                    style={{
-                      // Set a fixed height for the dropdown
-                      overflowY: "auto", // Enable scrolling if items are greater than three
-                    }}
-                  >
+                {/* Search Results Logic */}
+                {loading ? (
+                  <div className="flex justify-center">
+                    <svg
+                      aria-hidden="true"
+                      class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <div style={{ overflowY: "auto" }}>
                     <div className="grid grid-cols-1">
                       {searchResults.map((post) => (
                         <BlogCard key={post.title} post={post} />
                       ))}
                     </div>
-                    {loading && (
-                      <div className=" flex justify-center">
-                        <svg
-                          aria-hidden="true"
-                          class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                          viewBox="0 0 100 101"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill"
-                          />
-                        </svg>
-                      </div>
-                    )}
                   </div>
                 ) : (
-                  <>{searchQuery && <p>No results found.</p>}</>
+                  // Display "No results found" only after loading is done
+                  <p>No results found.</p>
                 )}
-
-                {/* View all products */}
               </div>
             )}
           </span>
@@ -404,9 +431,10 @@ const NavbarFour = () => {
                   <div className="flex items-center justify-between pb-8">
                     <div className="inline-flex items-center space-x-2">
                       <Link href="/">
-                      <span className={`font-bold ${styles.gradi}`}>
-                        TradeMate
-                      </span></Link>
+                        <span className={`font-bold ${styles.gradi}`}>
+                          TradeMate
+                        </span>
+                      </Link>
                     </div>
                     <div className="-mr-2">
                       <button
