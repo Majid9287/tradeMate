@@ -28,16 +28,69 @@ const Chatbot = () => {
   const [message, setMessage] = useState("");
   const btnRef = React.useRef();
   const fetchChatBotResponse = async (text) => {
-    try {
-      console.log(text)
-      const response = await axios.get(`/api/chatbot/chatbot?text=${text}`);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching chatbot response:", error);
-      return null;
+    const LANGUAGE_MODEL_API_KEY = "AIzaSyBS_bDrruqlZkiYEDe_A_koaHUbLwxCsNM";
+    const LANGUAGE_MODEL_URL = `https://generativelanguage.googleapis.com/v1beta1/models/chat-bison-001:generateMessage?key=${LANGUAGE_MODEL_API_KEY}`;
+    
+    // Convert text to lowercase for case-insensitive matching
+    const lowercaseText = text.toLowerCase();
+  
+    if (
+      lowercaseText.includes("trading") ||
+      lowercaseText.includes("electricity") ||
+      lowercaseText.includes("trade guidance portal") ||
+      lowercaseText.includes("guidelines") ||
+      lowercaseText.includes("practical trading") ||
+      lowercaseText.includes("courses") ||
+      lowercaseText.includes("assignments") ||
+      lowercaseText.includes("lectures") ||
+      lowercaseText.includes("social community") ||
+      lowercaseText.includes("trading strategies") ||
+      lowercaseText.includes("market analysis") ||
+      lowercaseText.includes("technical analysis") ||
+      lowercaseText.includes("fundamental analysis") ||
+      lowercaseText.includes("trading signals") ||
+      lowercaseText.includes("trading tools") ||
+      lowercaseText.includes("trading platforms") ||
+      lowercaseText.includes("market trends") ||
+      lowercaseText.includes("broker") ||
+      lowercaseText.includes("brokers") ||
+      lowercaseText.includes("exchange ") ||
+      lowercaseText.includes("crypto exchange") ||
+      lowercaseText.includes("crypto coins") ||
+      lowercaseText.includes("tokens") ||
+      lowercaseText.includes("currency") ||
+      lowercaseText.includes("hello") ||
+      lowercaseText.includes("hi")
+    ) {
+      const payload = {
+        prompt: { messages: [{ content: text }] },
+        temperature: 0.1,
+        candidate_count: 1,
+      };
+  
+      try {
+        const response = await fetch(LANGUAGE_MODEL_URL, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+          method: "POST",
+        });
+  
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error("Error:", error);
+        return { error: "Internal Server Error" };
+      }
+    } else {
+      return {
+        message: "I can only answer questions related trading and finance.",
+      };
     }
   };
-
+  
+  
   const handleSendMessage = async () => {
     const newMessage = {
       sender: "user",
